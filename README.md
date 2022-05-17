@@ -36,7 +36,7 @@ This work was conducted near the community of Rankin Inlet, Nunavut, Canada (62Â
 
 ## Markdown file
 * Click the link below to access markdown file with full workflow and output from each model. 
-https://github.com/nuwcru/Rankin_Inlet-Nest_Defense_PEFA/blob/main/scripts/State_dependence_repeatability_NestDefense_Rmd.md
+* https://github.com/nuwcru/Rankin_Inlet-Nest_Defense_PEFA/blob/main/scripts/State_dependence_repeatability_NestDefense_Rmd.md
 
 ## Authors
 * Nick Gulotta, University of Georgia (Nickolas.Gulotta@uga.edu)
