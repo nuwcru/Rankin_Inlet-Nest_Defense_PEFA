@@ -1,5 +1,5 @@
 
-![Picture1](https://user-images.githubusercontent.com/56907107/168870482-e1d2c14b-f8ca-4dca-a001-42b90364b17a.jpg)
+![Picture2](https://user-images.githubusercontent.com/56907107/168870863-f50d43cb-c687-4f0c-9a9d-aae8744805dd.jpg)
 
 # NuWCRU-- Does fluctuating selection maintain variation in nest defense behavior in Arctic peregrine falcons (_Falco peregrinus tundrius_)?
 
