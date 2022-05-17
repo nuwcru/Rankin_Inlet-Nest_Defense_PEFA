@@ -35,6 +35,10 @@ This work was conducted near the community of Rankin Inlet, Nunavut, Canada (62Â
   * **nest_defense_test_final**- data used for main effects (Raw data that is used to produce data_2018 and data_2019 data frames)
   * **nest_defense_test_final_20220318**- data used for correlations across breeding contexts
 
+## Markdown file
+
+https://github.com/nuwcru/Rankin_Inlet-Nest_Defense_PEFA/blob/main/scripts/State_dependence_repeatability_NestDefense_Rmd.md
+
 ## Authors
 * Nick Gulotta, University of Georgia (Nickolas.Gulotta@uga.edu)
 * Kimberley Mathot, University of Alberta (mathot@ualberta.ca)
