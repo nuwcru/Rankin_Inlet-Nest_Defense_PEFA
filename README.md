@@ -28,11 +28,15 @@ Within populations, individuals often exhibit repeatable among-individual differ
 ```
 
 ## Data 
-  * data_2018- data used for assortative mating and selection gradients for 2018
-  * data_2019- data used for assortative mating and selection gradients for 2018 
-  * nest_defense_test_final- data used for main effects (Raw data that is used to produce data_2018 and data_2019 data frames)
-  * nest_defense_test_final_20220318- data used for correlations across breeding contexts
+  * **data_2018**- data used for assortative mating and selection gradients for 2018
+  * **data_2019**- data used for assortative mating and selection gradients for 2018 
+  * **nest_defense_test_final**- data used for main effects (Raw data that is used to produce data_2018 and data_2019 data frames)
+  * **nest_defense_test_final_20220318**- data used for correlations across breeding contexts
 
 ## Authors
 * Nick Gulotta, University of Georiga (Nickolas.Gulotta@uga.edu)
 * Kimberley Mathot, University of Alberta (mathot@ualberta.ca)
+
+
+![Picture2 (2)](https://user-images.githubusercontent.com/56907107/168872856-4bbd7c7d-eb2d-42dc-ab8c-79e7b97adba5.jpg)
+
