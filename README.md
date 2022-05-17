@@ -24,8 +24,9 @@ This work was conducted near the community of Rankin Inlet, Nunavut, Canada (62�
 │   └── nest_defense_test_final_20220318.csv                       <- Data ready for modeling
 │
 └── scripts
-    ├── State_dependence_repeatability_NestDefense_PEFA.R          <- all models combined
-
+    ├── State_dependence_repeatability_NestDefense_Rmd_files       <- folder that holds figures displayed in markdown file
+    ├── State_dependence_repeatability_NestDefense_PEFA.R          <- all models combined used in main text and ESM
+    └── State_dependence_repeatability_NestDefense_PEFA.md         <- markdown file with model output and figures
 
 ```
 
