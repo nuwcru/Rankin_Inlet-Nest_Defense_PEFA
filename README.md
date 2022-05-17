@@ -13,8 +13,6 @@ This work was conducted near the community of Rankin Inlet, Nunavut, Canada (62�
 ## General Project File Structure
 
 ```
-├── .gitignore                                                     <- Files that should be ignored by git. 
-|
 ├── README.md                                                      <- The top-level README including general project descriptions
 |
 ├── data
@@ -37,7 +35,7 @@ This work was conducted near the community of Rankin Inlet, Nunavut, Canada (62�
   * **nest_defense_test_final_20220318**- data used for correlations across breeding contexts
 
 ## Markdown file
-
+* Click the link below to access markdown file with full workflow and output from each model. 
 https://github.com/nuwcru/Rankin_Inlet-Nest_Defense_PEFA/blob/main/scripts/State_dependence_repeatability_NestDefense_Rmd.md
 
 ## Authors
