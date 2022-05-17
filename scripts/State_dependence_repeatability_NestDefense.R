@@ -1,26 +1,3 @@
-d18<-subset(data, data$Year=="2018")
-d19<-subset(data, data$Year=="2019")
-
-#plot
-p18<-ggplot(d18, aes(x = NestStage, y = MinDisRaw, factor=NestStage, fill=Sex, color=Sex)) + geom_boxplot() +
-  scale_y_continuous("Nest Defense (Cube-root transformed)",limits = c(0, 100)) +
-  scale_x_discrete("Nest Stage", labels=c('Egg-laying', 'Incubating', 'Provisioning'))+ 
-  guides(fill="none")+
-  guides(color="none")+
-theme_classic() 
-
-p18
-
-p19<-ggplot(d19, aes(x = NestStage, y = MinDisRaw, factor=NestStage, fill=Sex, color=Sex)) + geom_boxplot() +
-  scale_y_continuous("",limits = c(0, 100)) +
-  scale_x_discrete("Nest Stage", labels=c('Egg-laying', 'Incubating', 'Provisioning')) +
-  theme_classic() 
-
-p19
-
-
-require(cowplot)
-plot_grid(p18,p19, labels = "AUTO")
 
 #required packages
 require(readr)
@@ -51,7 +28,7 @@ data$LogMin<-log(data$MinDis100+1)
 data2<-subset(data, data$MinDisRaw<=100)
 names(data2)
 
-hist(data2$MinDis)
+hist(data2$MinDisRaw)
 data2$logMin<-log(data2$MinDisRaw+1)
 hist(data2$logMin)
 
@@ -95,7 +72,7 @@ posterior.mode(r)
 HPDinterval(r)
 
 
-###min distance (truncated to max of 100)----
+###Min distance (truncated to max of 100)----
 data$MinDis100<-ifelse(data$MinDisRaw>100,100,data$MinDisRaw)
 data$logMinDis100<-log(data$MinDis100+1)
 hist(data$logMinDis100)
@@ -213,7 +190,7 @@ HPDinterval(r)
 
 
 
-###2. multivariate model with 9 nest defense traits (across contexts)----
+###2. Multivariate model with 9 nest defense traits (across contexts)----
 data3c<-read.csv("data/nest_defense_test_final_20220318.csv")
 names(data3c)
 
@@ -231,7 +208,7 @@ data_3c$logPMinDis<-log(data_3c$PMinDis+1)
 
 
 
-### multivariate: FID across breeding contexts----
+### Multivariate: FID across breeding contexts----
 prior3var=list(R=list(V=diag(3),nu=3.002),G=list(G1=list(V=diag(3), nu=3.002)))
 
 m3FID<-MCMCglmm(cbind(logLFID, logIFID,logPFID)~(trait-1),
@@ -248,7 +225,7 @@ round(apply(c1,2,mean),2)
 round(apply(c1,2, quantile, c(0.025, 0.975)),2)
 
 
-##multivariate: minimum approach distance across breeding contexts----
+##Multivariate: minimum approach distance across breeding contexts----
 m3Min<-MCMCglmm(cbind(logLMinDis, logIMinDis,logPMinDis)~(trait-1),
                 random=~us(trait):ID,rcov=~idh(trait):units,
                 family=c("gaussian","gaussian", "gaussian"), prior=prior3var,
@@ -263,7 +240,7 @@ round(apply(c1,2,mean),2)
 round(apply(c1,2, quantile, c(0.025, 0.975)),2)
 
 
-#multivariate: number of dives across breeding contexts----
+#Multivariate: number of dives across breeding contexts----
 m3Dives<-MCMCglmm(cbind(Ldives, Idives,Pdives)~(trait-1),
                 random=~us(trait):ID,rcov=~idh(trait):units,
                 family=c("poisson","poisson", "poisson"), prior=prior3var,
@@ -279,7 +256,7 @@ round(apply(c1,2, quantile, c(0.025, 0.975)),2)
 
 
 
-#3. bivariate model with minimum distance and number of dives----
+#3. Bivariate model with minimum distance and number of dives----
 
 prior_2var= list(R = list(V = diag(2), nu = 1.002),
                  G = list(G1 = list(V = diag(2), nu = 2,
@@ -304,14 +281,14 @@ summary(model.2var)
 #among-individual covariance
 c1 <- posterior.cor(model.2var$VCV[,1:4])
 round(apply(c1,2,mean),2)
-round(apply(c2,2, quantile, c(0.025, 0.975)),2)
+round(apply(c1,2, quantile, c(0.025, 0.975)),2)
 
 #within individual covariance
 c2 <- posterior.cor(model.2var$VCV[,5:8])
 round(apply(c2,2,mean),2)
 round(apply(c2,2, quantile, c(0.025, 0.975)),2)
 
-#4. univariate model to estimate short-versus long-term repeatability----
+#4. Univariate model to estimate short-versus long-term repeatability----
 require(lme4)
 
 #no sex:nest stage interaction... Table S3
@@ -353,7 +330,7 @@ HPDinterval(r1)  ##repeatability
 
 
 
-#main effects similar without including interactions. Results for main text Table 1
+#Main effects similar without including interactions. Results for main text Table 1----
 m1<-lmer(LogMin~ Sex + NestStage + Year2+ (1|ID) + (1|ID_Series) ,
          data=data) 
 #summary
@@ -399,34 +376,30 @@ r1<-(bvar +bvar2  )/(rvar+bvar +bvar2 )
 posterior.mode(r1)
 HPDinterval(r1)  ##repeatability
 
-
-#load packages for predictive plot
-require(ggplot2)
-install.packages("pak")
-pak::pkg_install("r-lib/rlang")
-install.packages("tidyverse")
-require(rlang)
-require(ggeffects)
-require(ggplot2)
-
-#create data frame with predictions of random effects for ID
-t88<-ggpredict(model = m1, c( "NestStage","ID"), type="random" ,interval = "confidence", residuals=F)
-t88.1<-data.frame(t88)
+#Plot----
+d18<-subset(data, data$Year=="2018")
+d19<-subset(data, data$Year=="2019")
 
 #plot
-bp<-ggplot(t88.1, aes(x = x, y = predicted, group=group, color=group)) + geom_point()+
-geom_line() +
-  scale_y_continuous("Nest Defense (Cube-root transformed)") +
-  scale_x_discrete("Nest Stage", labels=c('Egg-laying', 'Incubating', 'Provisioning'))+theme_classic() +
-  labs(color = "ID") +
-  ggtitle(label ="",
-          subtitle = "")+
-  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5)) + 
-  theme_classic(base_size = 18)
+p18<-ggplot(d18, aes(x = NestStage, y = MinDisRaw, factor=NestStage, fill=Sex, color=Sex)) + geom_boxplot() +
+  scale_y_continuous("Nest Defense (Cube-root transformed)",limits = c(0, 100)) +
+  scale_x_discrete("Nest Stage", labels=c('Egg-laying', 'Incubating', 'Provisioning'))+ 
+  guides(fill="none")+
+  guides(color="none")+
+  theme_classic() 
 
-bp + guides(fill="none")+ scale_fill_discrete(guide="none")+ theme(legend.position="none")
+p18
+
+p19<-ggplot(d19, aes(x = NestStage, y = MinDisRaw, factor=NestStage, fill=Sex, color=Sex)) + geom_boxplot() +
+  scale_y_continuous("",limits = c(0, 100)) +
+  scale_x_discrete("Nest Stage", labels=c('Egg-laying', 'Incubating', 'Provisioning')) +
+  theme_classic() 
+
+p19
 
 
+require(cowplot)
+plot_grid(p18,p19, labels = "AUTO")
 
 ###5. Models of (dis-)assortative mating + relative fitness----
 #data
@@ -773,7 +746,7 @@ g6<-grid.arrange(Within_nest2018, top="Within-nest, 2018")
 g7<-grid.arrange(Within_nest2019, top="Within-nest, 2019")
 
 
-#plot----
+#Plot----
 
 final_plot<-grid.arrange(g4,g6,g5,g7, left= "Female nest defense (log x + 1)", 
                          bottom= "Male nest defense (log x + 1)")
