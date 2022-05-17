@@ -1,4 +1,5 @@
-![-1846847218694549623-IMG-1899](https://user-images.githubusercontent.com/56907107/168869272-78fdd991-e4d4-46b6-80ba-664f5bcbff1e.JPG)
+
+![Picture1](https://user-images.githubusercontent.com/56907107/168870482-e1d2c14b-f8ca-4dca-a001-42b90364b17a.jpg)
 
 # NuWCRU-- Does fluctuating selection maintain variation in nest defense behavior in Arctic peregrine falcons (_Falco peregrinus tundrius_)?
 
@@ -32,5 +33,5 @@ Within populations, individuals often exhibit repeatable among-individual differ
   * nest_defense_test_final_20220318- data used for correlations across breeding contexts
 
 ## Authors
-* Nick Gulotta, University of Georiga(Nickolas.Gulotta@uga.edu)
+* Nick Gulotta, University of Georiga (Nickolas.Gulotta@uga.edu)
 * Kimberley Mathot, University of Alberta (mathot@ualberta.ca)
