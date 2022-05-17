@@ -34,7 +34,7 @@ Within populations, individuals often exhibit repeatable among-individual differ
   * **nest_defense_test_final_20220318**- data used for correlations across breeding contexts
 
 ## Authors
-* Nick Gulotta, University of Georiga (Nickolas.Gulotta@uga.edu)
+* Nick Gulotta, University of Georgia (Nickolas.Gulotta@uga.edu)
 * Kimberley Mathot, University of Alberta (mathot@ualberta.ca)
 
 
