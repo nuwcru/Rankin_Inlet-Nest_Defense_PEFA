@@ -38,6 +38,3 @@ Within populations, individuals often exhibit repeatable among-individual differ
 * Kimberley Mathot, University of Alberta (mathot@ualberta.ca)
 
 
-
-![-1846847218694549623-IMG-1899 (2)](https://user-images.githubusercontent.com/56907107/168872653-f2781383-3ddc-4248-867f-582677ed9696.JPG)
-
