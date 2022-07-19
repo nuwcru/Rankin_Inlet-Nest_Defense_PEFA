@@ -1,0 +1,1210 @@
+---
+title: "R Script: Does fluctuating selection maintain variation in nest defense behavior in Arctic peregrine falcons (Falco peregrinus tundrius)?"
+output: github_document
+html_document:
+    theme: journal
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r LoadData, include=T, warning=F, message=F, results='hide'}
+#required packages
+require(readr)
+require(lme4)
+require(MCMCglmm)
+require(dplyr)
+require(ggplot2)
+require(rlang)
+require(tidyverse)
+require(rlang)
+require(ggeffects)
+require(arm)
+require(bayestestR)
+
+# Set wd
+setwd("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense")
+#load data
+data<-read.csv("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense/data/nest_defense_test_final.csv")
+names(data)
+```
+
+##### **Make Year,ID, and ID_Series factors. Inspect raw data and transform.**
+
+```{r factor, include=T, warning=F, message=F,attr.source='.numberLines'}
+
+data$Year2<-as.factor(data$Year2)
+data$ID_Series<-as.factor(data$ID_Series)
+data$ID<-as.factor(data$ID)
+
+summary(data$MinDisRaw)
+data$MinDis100<-ifelse(data$MinDisRaw>100,100,data$MinDisRaw)
+data$LogMin<-log(data$MinDis100+1)
+```
+
+##### **Minimum distance is capped at 100 meters (i.e., >100 is not a response)**
+
+```{r subset, include=T, warning=F, message=F, fig.height=5, fig.width=5}
+
+data2<-subset(data, data$MinDisRaw<=100)
+hist(data2$MinDisRaw)
+
+
+data2$logMin<-log(data2$MinDisRaw+1)
+hist(data2$logMin)
+
+```
+
+### **1. Sources of variation in nest defense**
+
+- *Univariate analyses of each of the three measures to i) evaluate if all three behaviors are representations of nest defense, and ii) choose best measure to use in main text.*
+
+
+
+
+
+#### **Univariate model-- Log-transformed minimum distance**
+
+```{r mod1, include=T, warning=F, message=F,fig.height=5, fig.width=5}
+#Minimum distance---- 
+require(lme4)
+m1<-lmer(logMin~ Sex + NestStage + Year2+ (1|ID)+(1|Observer) ,
+         data=data2) 
+
+#summary
+summary(m1)
+#model check
+plot(m1)
+hist(resid(m1)) # residuals
+lattice::qqmath(m1) #normality of errors
+```
+
+
+##### **Simulate posterior distribution--Log-transformed minimum distance**
+```{r, simM1, include=T, warning=F, message=F}
+sm1<-sim(m1)
+smfixef=sm1@fixef
+smranef=sm1@ranef
+smfixef=as.mcmc(smfixef)
+posterior.mode(smfixef)
+HPDinterval(smfixef)
+
+
+bID<-sm1@ranef$ID
+bvar<-as.vector(apply(bID, 1, var)) ##between individual variance posterior distribution
+bvar<-as.mcmc(bvar)
+posterior.mode(bvar )## mode of the distribution
+HPDinterval(bvar)
+
+bObs<-sm1@ranef$Observer
+ObsVar<-as.vector(apply(bObs, 1, var)) ##between individual variance posterior distribution
+ObsVar<-as.mcmc(ObsVar)
+posterior.mode(ObsVar )## mode of the distribution
+HPDinterval(ObsVar)
+
+rvar<-sm1@sigma^2
+rvar<-as.mcmc(rvar)
+posterior.mode(rvar)
+HPDinterval(rvar)
+```
+
+##### **Repeatability--Log-transformed minimum distance**
+
+```{r, rptM1, include=T, warning=F, message=F}
+r <- bvar/(bvar + rvar) ###individual
+posterior.mode(r)
+HPDinterval(r)
+```
+
+##### **Univariate model-- Log-transformed truncated minimum distance to the observer (i.e., >100m is not response)**
+
+```{r, mod2, include=T, warning=F, message=T,fig.height=5, fig.width=5}
+###min distance (truncated to max of 100)----
+data$MinDis100<-ifelse(data$MinDisRaw>100,100,data$MinDisRaw)
+data$logMinDis100<-log(data$MinDis100+1)
+hist(data$logMinDis100)
+m1.1<-lmer(logMinDis100~ Sex + NestStage + Year2+ (1|ID)+(1|Observer) ,
+         data=data) 
+#summary
+summary(m1.1)
+#model check
+plot(m1.1)
+hist(resid(m1.1)) # residuals
+lattice::qqmath(m1.1) #normality of errors
+
+```
+
+##### **Simulate posterior distribution--Log-transformed truncated minimum distance to the observer (i.e., >100m is not response)**
+
+```{r, simM2, include=T, warning=F, message=F}
+sm1<-sim(m1.1)
+smfixef=sm1@fixef
+smranef=sm1@ranef
+smfixef=as.mcmc(smfixef)
+posterior.mode(smfixef)
+HPDinterval(smfixef)
+
+bID<-sm1@ranef$ID
+bvar<-as.vector(apply(bID, 1, var)) ##between individual variance posterior distribution
+bvar<-as.mcmc(bvar)
+posterior.mode(bvar )## mode of the distribution
+HPDinterval(bvar)
+
+bObs<-sm1@ranef$Observer
+ObsVar<-as.vector(apply(bObs, 1, var)) ##between individual variance posterior distribution
+ObsVar<-as.mcmc(ObsVar)
+posterior.mode(ObsVar )## mode of the distribution
+HPDinterval(ObsVar)
+
+rvar<-sm1@sigma^2
+rvar<-as.mcmc(rvar)
+posterior.mode(rvar)
+HPDinterval(rvar)
+
+```
+
+##### **Repeatability--Log-transformed truncated minimum distance to the observer (i.e., >100m is not response)**
+
+```{r, rptM2, include=T, warning=F, message=F}
+r <- bvar/(bvar + rvar)        ###individual
+posterior.mode(r)
+HPDinterval(r)
+```
+
+#### **Univariate model-- Number of Stoops**
+
+```{r, mod3, include=T, warning=F, message=F, fig.height=5, fig.width=5}
+
+###Number of stoops----
+#names(data)
+m2<-glmer(Dives~ Sex + NestStage + Year2+ (1|ID)+ (1|Observer) ,
+         data=data, family="poisson") 
+#summary
+summary(m2)
+```
+
+##### **Simulate posterior distribution--Number of Stoops**
+
+```{r, m2post, include=TRUE, warning=F, message=F}
+
+sm2<-sim(m2)
+smfixef=sm2@fixef
+smranef=sm2@ranef
+smfixef=as.mcmc(smfixef)
+posterior.mode(smfixef)
+HPDinterval(smfixef)
+
+bID<-sm2@ranef$ID
+bvar<-as.vector(apply(bID, 1, var)) ##between individual variance posterior distribution
+bvar<-as.mcmc(bvar)
+posterior.mode(bvar )## mode of the distribution
+HPDinterval(bvar)
+
+bObs<-sm2@ranef$Observer
+ObsVar<-as.vector(apply(bObs, 1, var)) ##between individual variance posterior distribution
+ObsVar<-as.mcmc(ObsVar)
+posterior.mode(ObsVar )## mode of the distribution
+HPDinterval(ObsVar)
+```
+
+##### **Repeatability-- Number of Stoops**
+
+```{r, rptm3, include=T, warning=F, message=F}
+
+r <- bvar/(bvar + 1)        ###individual
+posterior.mode(r)
+HPDinterval(r)
+
+```
+
+#### **Univariate model-- Log-transformed FID**
+
+```{r, mod4, include=T, warning=F, message=F, fig.height=5, fig.width=5}
+###FID----
+data3<-subset(data, data$FID>0)
+hist(data3$FID)
+data3$logFID<-log(data3$FID+1)
+hist(data3$logFID)
+
+m3<-lmer(logFID~ Sex + NestStage + Year2+ (1|ID)+(1|Observer) ,
+         data=data3) 
+#summary
+summary(m3)
+#model check
+plot(m3)
+hist(resid(m3)) # residuals
+lattice::qqmath(m3) #normality of errors
+```
+
+##### **Simulate posterior distribution-- Log-transformed FID**
+
+``` {r, simM3, include=T, warning=F, message=F}
+sm3<-sim(m3)
+smfixef=sm3@fixef
+smranef=sm3@ranef
+smfixef=as.mcmc(smfixef)
+posterior.mode(smfixef)
+HPDinterval(smfixef)
+
+bID<-sm3@ranef$ID
+bvar<-as.vector(apply(bID, 1, var)) ##between individual variance posterior distribution
+bvar<-as.mcmc(bvar)
+posterior.mode(bvar )## mode of the distribution
+HPDinterval(bvar)
+
+bObs<-sm3@ranef$Observer
+ObsVar<-as.vector(apply(bObs, 1, var)) ##between individual variance posterior distribution
+ObsVar<-as.mcmc(ObsVar)
+posterior.mode(ObsVar )## mode of the distribution
+HPDinterval(ObsVar)
+
+rvar<-sm1@sigma^2
+rvar<-as.mcmc(rvar)
+posterior.mode(rvar)
+HPDinterval(rvar)
+```
+
+##### **Repeatability-- Log-transformed FID**
+
+```{r, rptM3, include=T, warning=F, message=F}
+r <- bvar/(bvar + rvar)        ###individual
+posterior.mode(r)
+HPDinterval(r)
+```
+
+
+### **2. Multivariate model with 9 nest defense traits (across contexts)**
+
+- *Since we had variable effects of nest stage with each behavior measured, we constructed three  multivariate models to understand the correlation of each measure of nest defense with nest stage.*
+
+```{r, load, include=T, warning=F, message=F, results='hide', echo=F}
+require(readr)
+# Set wd
+setwd("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense")
+data3c<- read_csv("data/nest_defense_test_final_20220318.csv")
+names(data3c)
+
+data_3c<-subset(data3c, data3c$FID>0)
+
+
+data_3c$logLFID<-log(data_3c$LFID+1) 
+data_3c$logIFID<-log(data_3c$IFID+1)
+data_3c$logPFID<-log(data_3c$PFID+1)
+
+data_3c$logLMinDis<-log(data_3c$LMinDis+1)
+data_3c$logIMinDis<-log(data_3c$IMinDis+1)
+data_3c$logPMinDis<-log(data_3c$PMinDis+1)
+
+
+data_3c<-as.data.frame(data_3c)
+```
+
+
+#### **Multivariate: FID across breeding contexts**
+
+```{r, mvFID, include=T, warning=F, message=F,fig.height=8, fig.width=12}
+prior3var=list(R=list(V=diag(3),nu=3.002),G=list(G1=list(V=diag(3), nu=3.002))) #3 trait prior w/one random effect
+
+m3FID<-MCMCglmm(cbind(logLFID, logIFID,logPFID)~(trait-1),
+             random=~us(trait):ID,
+             rcov=~idh(trait):units,
+             family=c("gaussian","gaussian", "gaussian"),
+             prior=prior3var,
+             nitt=1300000,thin=1000,burnin=300000, 
+             data=data_3c,verbose=F)
+
+summary(m3FID)
+plot(m3FID)
+
+```
+
+##### **Among-individual covariance-FID**
+
+```{r, amongCov88, include=T, warning=F}
+
+c1 <- posterior.cor(m3FID$VCV[,1:9])
+round(apply(c1,2,mean),2)
+round(apply(c1,2, quantile, c(0.025, 0.975)),2)
+
+```
+
+
+#### **Multivariate: minimum approach distance across breeding contexts**
+
+```{r, mvMin, include=T, warning=F, message=F,fig.height=8, fig.width=12}
+m3Min<-MCMCglmm(cbind(logLMinDis, logIMinDis,logPMinDis)~(trait-1),
+                random=~us(trait):ID,
+                rcov=~idh(trait):units,
+                family=c("gaussian","gaussian", "gaussian"),
+                prior=prior3var,
+                nitt=1300000,thin=1000,burnin=300000, 
+                data=data_3c,verbose=FALSE)
+
+summary(m3Min)
+plot(m3Min)
+```
+
+##### **Among-individual covariance--minimum approach distance across breeding contexts**
+
+```{r, amongCoMin, include=T, warning=F}
+
+c1 <- posterior.cor(m3Min$VCV[,1:9])
+round(apply(c1,2,mean),2)
+round(apply(c1,2, quantile, c(0.025, 0.975)),2)
+```
+
+#### **Multivariate: number of dives across breeding contexts**
+
+```{r, mvStoop, include=T, warning=F, message=F,fig.height=8, fig.width=12}
+m3Dives<-MCMCglmm(cbind(Ldives, Idives,Pdives)~(trait-1),
+                random=~us(trait):ID,
+                rcov=~idh(trait):units,
+                family=c("poisson","poisson", "poisson"), 
+                prior=prior3var,
+                nitt=1300000,thin=1000,burnin=300000, 
+                data=data_3c,verbose=FALSE)
+
+summary(m3Dives)
+plot(m3Dives)
+```
+
+##### **Among-individual covariance--number of dives across breeding contexts**
+
+```{r, amongCoStoop, include=T, warning=F, message=F}
+
+c1 <- posterior.cor(m3Dives$VCV[,1:9])
+round(apply(c1,2,mean),2)
+round(apply(c1,2, quantile, c(0.025, 0.975)),2)
+
+```
+
+
+### **3. Bivariate model with minimum distance and number of dives**
+
+- *Evaluate covariance between each measure of nest defense*
+
+``` {r, 3bivariate, include=T, warning=F, message=F,fig.height=8, fig.width=12}
+prior_2var= list(R = list(V = diag(2), nu = 1.002),
+                 G = list(G1 = list(V = diag(2), nu = 2,
+                                    alpha.mu = rep(0,2),
+                                    alpha.V = diag(25^2,2)))) # 3-trait prior w/one random effect
+#names(data)
+
+model.2var <- MCMCglmm(
+  cbind(LogMin, Dives) ~ trait - 1,
+  random = ~ us(trait):ID,
+  rcov = ~ us(trait):units,
+  family = c("gaussian", "poisson"),
+  data = data,
+  prior = prior_2var,
+  verbose = FALSE,
+  nitt = 1300000, thin = 1000, burnin = 300000
+  )
+
+
+summary(model.2var)
+plot(model.2var)
+```
+
+#### **Among-individual and within-individual covariance--minimum distance and number of dives**
+
+```{r, amongCoBivar, include=T, warning=F, message=F}
+
+c1<- posterior.cor(model.2var$VCV[,1:4])
+round(apply(c1,2,mean),2)
+round(apply(c1,2, quantile, c(0.025, 0.975)),2)
+
+#within individual covariance
+c2<- posterior.cor(model.2var$VCV[,5:8])
+round(apply(c2,2,mean),2)
+round(apply(c2,2, quantile, c(0.025, 0.975)),2)
+```
+
+
+### **4. Univariate model to estimate short-versus long-term repeatability with interaction**
+- *Interaction is included since we predicted that females would be more defensive with increasing nest stages.*
+
+```{r, univariateSvLr, include= T, warning= F, message=F}
+
+#no sex:nest stage interaction... Table S3
+require(lme4)
+m1.0<-lmer(LogMin~ (Sex + NestStage)^2 + Year2+ (1|ID) + (1|ID_Series) ,
+         data=data) 
+summary(m1.0)
+anova(m1.0)
+```
+
+##### **Simulate posterior distribution**
+
+```{r, simm1.0, include=T, warning=F, message=F}
+
+smod<-sim(m1.0,1000)
+posterior.mode(as.mcmc(smod@fixef))
+HPDinterval(as.mcmc(smod@fixef))
+##Between individual variance
+bID<-smod@ranef$ID[,,1]
+bvar<-as.vector(apply(bID, 1, var)) ##ID variance posterior distribution
+require(MCMCglmm)
+bvar<-as.mcmc(bvar)
+posterior.mode(bvar )## mode of the distribution
+HPDinterval(bvar)
+##Between individual variance, ID_Series
+bID2<-smod@ranef$ID_Series[,,1]
+bvar2<-as.vector(apply(bID2, 1, var)) ##ID_Series variance posterior distribution
+require(MCMCglmm)
+bvar2<-as.mcmc(bvar2)
+posterior.mode(bvar2 )## mode of the distribution
+HPDinterval(bvar2)
+###residual variance
+rvar<-smod@sigma^2
+rvar<-as.mcmc(rvar)
+posterior.mode(rvar)
+HPDinterval(rvar)
+
+```
+
+##### **Long-term and short-term repeatability**
+
+```{r, rptLvS, include=T, warning=F, message=T}
+### Long-term repeatability
+r<-bvar/(rvar+bvar +bvar2 )
+posterior.mode(r)
+HPDinterval(r)  ##repeatability 
+###Short-term
+r1<-(bvar +bvar2  )/(rvar+bvar +bvar2 )
+posterior.mode(r1)
+HPDinterval(r1)  ##repeatability
+
+```
+
+### **Main effects similar without including interactions.**
+
+- *We dropped the interaction since it was not significant. Results for main text Table 1*
+
+``` {r, unvME, include=T, warning=F, message=F, fig.height=5, fig.width=5}
+
+cor.test(data$Stage, data$NumberOfChicks)#correlation b/n nest stage and number of chicks. r=0.78 thus drop Number of Chicks from model 
+m1<-lmer(LogMin~ Sex + NestStage +Year2+ (1|ID) + (1|ID_Series) ,
+         data=data) 
+#summary
+summary(m1)
+#model check
+plot(m1)
+hist(resid(m1)) # residuals
+lattice::qqmath(m1) #normality of errors
+```
+
+##### **Simulate posterior distribution-- Univariate model with no interaction**
+
+```{r, unMESim, include=T, warning=F, message=T}
+#simulated parameters
+require(dplyr)
+library(arm)
+require(MCMCglmm)
+smod<-sim(m1,1000)
+posterior.mode(as.mcmc(smod@fixef))
+HPDinterval(as.mcmc(smod@fixef))
+##Between individual variance
+bID<-smod@ranef$ID[,,1]
+bvar<-as.vector(apply(bID, 1, var)) ##ID variance posterior distribution
+require(MCMCglmm)
+bvar<-as.mcmc(bvar)
+posterior.mode(bvar )## mode of the distribution
+HPDinterval(bvar)
+##Between individual variance, ID_Series
+bID2<-smod@ranef$ID_Series[,,1]
+bvar2<-as.vector(apply(bID2, 1, var)) ##ID_Series variance posterior distribution
+require(MCMCglmm)
+bvar2<-as.mcmc(bvar2)
+posterior.mode(bvar2 )## mode of the distribution
+HPDinterval(bvar2)
+###residual variance
+rvar<-smod@sigma^2
+rvar<-as.mcmc(rvar)
+posterior.mode(rvar)
+HPDinterval(rvar)
+
+```
+
+#### **Contrasts differences among-sexes**
+
+```{r, contrast, include=T, warning=F, message=T}
+#compute difference among-sexes
+
+p222<-smod@fixef[,1:2]#gather posterior for intercept(female) and Male 
+p222<-as.data.frame(p222)#make a dataframe to manipulate easier
+colnames(p222)<-c("Female", "SexMale")#change column names
+p22<-p222%>%
+  summarise(Male= Female+ SexMale)#add posteriors for Intercept to each value of Male
+
+con<-as.data.frame(c(p222, p22))#combine estimates into one dataframe
+
+difference<-con%>%
+  summarise(diff= Female - Male)#compute difference
+
+contrast<-as.data.frame(c(con, difference))#dataframe for contrasts
+
+require(bayestestR)
+describe_posterior(contrast)# pd is 87% for difference among sexes 
+contable<-describe_posterior(contrast)#estimates for difference b/n male and female nest defense
+
+contab<-contable%>%filter(Parameter=="diff")
+
+
+plot(pd(contrast$diff))+theme_classic()
+
+ggplot(contrast, aes(x=diff)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(contrast$diff), color="red", size=1)+
+   geom_vline(xintercept = (contab$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (contab$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between male and female defense",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+```
+
+#### **Contrast differences among-nest stages**
+
+```{r, contrast2, include=T, warning=F, message=F}
+
+
+p2223<-smod@fixef[,3:4]#gather posterior for incubation and provisioning nest stages 
+p2223<-as.data.frame(p2223)#make a dataframe to manipulate easier
+p2224<-smod@fixef[,1]#extract intercept (estimate for egg-laying)
+p2224<-as.data.frame(p2224)
+colnames(p2224)<-"Intercept"
+
+nestcon<-as.data.frame(c(p2224, p2223))
+
+#compute estimates for each nest stage
+neststage<-nestcon%>%
+  summarise(Incubation   = Intercept  + NestStage2Incubating,
+            Provisioning = Intercept + NestStage3Provisioning,
+            EggLaying    = Intercept)#add posteriors for Intercept to each value of Male
+
+#compute differences between nest stage groups
+contrasts<-neststage%>%
+  summarise(diff_ie = Incubation-EggLaying,
+            diff_ip = Incubation-Provisioning,
+            diff_ep = EggLaying-Provisioning)
+require(bayestestR)
+describe_posterior(contrasts)#median, 95% CrI and PD for each difference
+
+contable<-describe_posterior(contrasts)#estimates for difference b/n male and female nest defense
+diff_ie<-contable%>%filter(Parameter=="diff_ie")
+diff_ip<-contable%>%filter(Parameter=="diff_ip")
+diff_ep<-contable%>%filter(Parameter=="diff_ep")
+
+# incubation vs egg-laying
+p3<-ggplot(contrasts, aes(x=diff_ie)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(contrasts$diff_ie), color="red", size=1)+
+   geom_vline(xintercept = (diff_ie$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (diff_ie$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between incubation and egg laying",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+p3
+# pd plot incubation vs egg-laying
+plot(pd(contrasts$diff_ie))+theme_classic()
+
+
+# incubation vs provisioning
+p2<-ggplot(contrasts, aes(x=diff_ip)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(contrasts$diff_ip), color="red", size=1)+
+   geom_vline(xintercept = (diff_ip$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (diff_ip$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between incubation and provisioning",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+p2
+# pd plot incubation vs egg-laying
+plot(pd(contrasts$diff_ip))+theme_classic()
+
+
+# egg laying vs provisioning
+p1<-ggplot(contrasts, aes(x=diff_ep)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(contrasts$diff_ep), color="red", size=1)+
+   geom_vline(xintercept = (diff_ep$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (diff_ep$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between incubation and provisioning",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+p1
+# pd plot egg laying vs provisioning
+plot(pd(contrasts$diff_ep))+theme_classic()
+
+```
+
+### **Contrast difference among years**
+
+```{r, contrast5, include=T, warning=F, message=T}
+
+
+p55<-smod@fixef[,5]#gather posterior for intercept(female) and Male 
+p55<-as.data.frame(p222)#make a dataframe to manipulate easier
+colnames(p55)<-c("Year2019")#change column names
+p2224<-smod@fixef[,1]#extract intercept (estimate for egg-laying)
+p2224<-as.data.frame(p2224)
+colnames(p2224)<-"Intercept"
+
+yearcon<-as.data.frame(c(p2224, p55))
+
+p2299<-yearcon%>%
+  summarise(Y2019 = Intercept+ Year2019)#add posteriors for Intercept(2018) to each value of Male
+
+ycon<-as.data.frame(c(yearcon, p2299)) 
+
+
+difference_y<-ycon%>%
+  summarise(diff_year= Intercept - Y2019)#compute difference
+
+
+require(bayestestR)
+describe_posterior(difference_y)# pd is 87% for difference among sexes 
+contable<-describe_posterior(difference_y)#estimates for difference b/n male and female nest defense
+
+
+
+
+ggplot(difference_y, aes(x=diff_year)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(difference_y$diff_year), color="red", size=1)+
+   geom_vline(xintercept = (contable$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (contable$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between 2018 and 2019",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
+plot(pd(difference_y$diff_year))+theme_classic()
+```
+
+##### **Long-term and short-term repeatability--Univariate model with no interaction**
+
+``` {r, lvsrpt, include=T, warning=F, message=F}
+### Long-term repeatability
+r<-bvar/(rvar+bvar +bvar2 )
+posterior.mode(r)
+HPDinterval(r)  ##repeatability 
+###Short-term
+r1<-(bvar +bvar2  )/(rvar+bvar +bvar2 )
+posterior.mode(r1)
+HPDinterval(r1)  ##repeatability
+```
+
+
+##### **Plot--Univariate model with no interaction**
+
+``` {r, plot1, include=T, warning=F, message=F,fig.width=10, fig.height=5}
+#load packages for predictive plot
+require(ggplot2)
+require(ggeffects)
+require(cowplot)
+
+d18<-subset(data, data$Year=="2018")
+d19<-subset(data, data$Year=="2019")
+
+#plot
+p18<-ggplot(d18, aes(x = NestStage, y = MinDisRaw, factor=NestStage, fill=Sex)) + geom_boxplot() +
+  scale_y_continuous("Minimum approach distnace to observer (m)",limits = c(0, 100)) +
+  scale_x_discrete("Nest Stage", labels=c('Egg-laying', 'Incubating', 'Provisioning'))+ 
+  guides(fill="none")+
+  guides(color="none")+ theme_classic(base_size = 12)  +
+  ggtitle(label ="2018",
+          subtitle = "")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
+
+
+p19<-ggplot(d19, aes(x = NestStage, y = MinDisRaw, factor=NestStage, fill=Sex)) + geom_boxplot() +
+  scale_y_continuous("Minimum approach distnace to observer (m)",limits = c(0, 100)) +
+  scale_x_discrete("Nest Stage", labels=c('Egg-laying', 'Incubating', 'Provisioning'))+ 
+  guides(color="none")+ theme_classic(base_size = 12)  +
+  ggtitle(label ="2019",
+          subtitle = "")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
+plot_grid(p18,p19)
+
+
+#posterior of difference plots for groups in main effects (supp material)
+cowplot::plot_grid(p3, p2, p1, nrow = 2,labels = c("A.", "B.", "C."))
+
+```
+
+### **5. Models of (dis-)assortative mating + relative fitness**
+
+- *Multivariate models that estimate assortative mating (among-pair correlation), response to labile environment (within-pair correlation), and selection gradients for each combination of sex and year.*
+
+``` {r, assortFit, include=T, warning=F, message=F,echo=F}
+
+# Set wd
+setwd("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense")
+require(readr)
+#data
+data2018<-read.csv("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense/data/data_2018.csv")
+data2019<-read.csv("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense/data/data_2019.csv")
+
+#names(data2018)
+data2018$Male<-log(data2018$male_raw+1)*-1
+data2018$Female<-log(data2018$female_raw+1)*-1
+
+#names(data2019)
+data2019$Male<-log(data2019$male_raw+1)*-1
+data2019$Female<-log(data2019$female_raw+1)*-1
+
+#prior for three traits- from Houslay tutorial
+prior_E_B_fit_1px = list(R = list(V = diag(c(1,1,0.0001),3,3), nu = 1.002, fix = 3),
+                         G = list(G1 = list(V = diag(3), nu = 3,
+                                            alpha.mu = rep(0,3),
+                                            alpha.V = diag(25^2,3,3))))
+#set residual variance for fitness near 0
+prior_E_B_fit_1px$R$V[3,3]<-0.0001
+
+```
+
+
+#### **2018 3 trait model**
+
+```{r, 2018trait, include=T, warning=F, message=T, fig.height=8, fig.width=12}
+
+mod.12 <- MCMCglmm(cbind(Male, Female, rfit) ~ (trait-1),  
+                   random = ~us(trait):NestID ,
+                   rcov = ~us(trait):units, 
+                   family = c("gaussian", "gaussian", "gaussian"),
+                   data=data2018, 
+                   prior = prior_E_B_fit_1px, 
+                   verbose = FALSE,
+                   nitt=590000,thin=500,burnin=90000
+                   )
+summary(mod.12)
+
+plot(mod.12)
+
+
+
+#auto-correlation
+autocorr.diag(mod.12$VCV)
+autocorr(mod.12$Sol)
+```
+
+##### **Among and within-pair correlations and selection gradients-- 2018 3 trait model**
+
+``` {r, cor18, include=T, warning=F, message=T}
+
+# posteriors
+posteriors_3<-as.mcmc(mod.12$VCV)
+posterior.mode(posteriors_3)
+
+# among-pair correlations
+pair.correlation_3<-posteriors_3[,"traitFemale:traitMale.NestID"]/
+  sqrt(posteriors_3[,"traitFemale:traitFemale.NestID"]*
+         posteriors_3[,"traitMale:traitMale.NestID"])
+
+posterior.mode(pair.correlation_3)
+HPDinterval(pair.correlation_3)
+# within-pair correlations (residuals)
+residual.correlation_3<-posteriors_3[,"traitFemale:traitMale.units"]/
+  sqrt(posteriors_3[,"traitFemale:traitFemale.units"]*
+         posteriors_3[,"traitMale:traitMale.units"])
+
+posterior.mode(residual.correlation_3)
+HPDinterval(residual.correlation_3)
+#male selection gradient
+Male_sel_18<- posteriors_3[,"traitrfit:traitMale.NestID"]/
+  (sqrt(posteriors_3[,"traitrfit:traitrfit.NestID"])*
+     sqrt(posteriors_3[,"traitMale:traitMale.NestID"]))
+posterior.mode(Male_sel_18)
+HPDinterval(Male_sel_18)
+
+#female selection gradient
+Female_sel_18<- posteriors_3[,"traitrfit:traitFemale.NestID"]/
+  (sqrt(posteriors_3[,"traitrfit:traitrfit.NestID"])*
+     sqrt(posteriors_3[,"traitFemale:traitFemale.NestID"]))
+posterior.mode(Female_sel_18)
+HPDinterval(Female_sel_18)
+```
+
+
+
+#### **2019 3 trait model**
+
+```{r, 2019Assort, include=T, warning=F, message=F, include=T, fig.height=8, fig.width=12}
+
+#prior for three trait- Houslay tutorial 
+prior_E_B_fit_1px = list(R = list(V = diag(c(1,1,0.0001),3,3), nu = 1.002, fix = 3),
+                         G = list(G1 = list(V = diag(3), nu = 3,
+                                            alpha.mu = rep(0,3),
+                                            alpha.V = diag(25^2,3,3))))
+
+#model
+mod.13 <- MCMCglmm(cbind(Male, Female, rfit) ~ (trait-1),  
+                   random = ~us(trait):NestID ,
+                   rcov = ~us(trait):units, 
+                   family = c("gaussian", "gaussian", "gaussian"),
+                   data=data2019, 
+                   prior = prior_E_B_fit_1px, 
+                   verbose = FALSE,
+                   nitt=590000,thin=500,burnin=90000)
+summary(mod.13)
+
+plot(mod.13)
+
+
+#auto-correlation
+autocorr.diag(mod.13$VCV)
+autocorr(mod.13$Sol)
+
+# posteriors
+posteriors1<-as.mcmc(mod.13$VCV)
+posterior.mode(posteriors1)
+
+```
+
+##### **Among and within-pair correlations and selection gradients-- 2019 3 trait model**
+
+```{r, cor19, include=T, warning=F, message=F}
+
+# among-pair correlations
+pair.correlation_4<-posteriors1[,"traitFemale:traitMale.NestID"]/
+  sqrt(posteriors1[,"traitFemale:traitFemale.NestID"]*
+         posteriors1[,"traitMale:traitMale.NestID"])
+
+posterior.mode(pair.correlation_4)
+HPDinterval(pair.correlation_4)
+# within-pair correlations (residuals)
+residual.correlation4<-posteriors1[,"traitFemale:traitMale.units"]/
+  sqrt(posteriors1[,"traitFemale:traitFemale.units"]*
+         posteriors1[,"traitMale:traitMale.units"])
+
+posterior.mode(residual.correlation4)
+HPDinterval(residual.correlation4)
+#male selection gradient
+Male_sel_19<- posteriors1[,"traitrfit:traitMale.NestID"]/
+  (sqrt(posteriors1[,"traitrfit:traitrfit.NestID"])*
+     sqrt(posteriors1[,"traitMale:traitMale.NestID"]))
+posterior.mode(Male_sel_19)
+HPDinterval(Male_sel_19)
+#female selection gradient
+Female_sel_19<- posteriors1[,"traitrfit:traitFemale.NestID"]/
+  (sqrt(posteriors1[,"traitrfit:traitrfit.NestID"])*
+     sqrt(posteriors1[,"traitFemale:traitFemale.NestID"]))
+posterior.mode(Female_sel_19)
+HPDinterval(Female_sel_19)
+```
+
+
+##### **Comparing 2018 and 2019**
+
+```{r, compare2018v2019, include=T, warning=F, message=F}
+#among
+y2018a<-ifelse(pair.correlation_3<0.04291904,1,0)
+sum(y2018a)
+
+y2018b<-ifelse(pair.correlation_3>0.04291904,1,0)
+sum(y2018b)
+
+y2019a<-ifelse(pair.correlation_4>(-0.334157 ),1,0)
+sum(y2019a)
+
+y2019b<-ifelse(pair.correlation_4<(-0.334157 ),1,0)
+sum(y2019b)
+
+p<-(sum(y2018a)/1000)*(sum(y2019a)/1000)
+p
+
+#within
+y2018w<-ifelse(residual.correlation_3>0.04291904,1,0)
+sum(y2018w)
+y2018x<-ifelse(residual.correlation_3<0.04291904,1,0)
+sum(y2018x)
+y2019w<-ifelse(residual.correlation4<0.3588893,1,0)
+sum(y2019w)
+y2019x<-ifelse(residual.correlation4>0.3588893,1,0)
+sum(y2019x)
+
+p<-sum(y2018w)/1000*sum(y2019w)/1000
+p
+
+##compare sexes within years
+m2018<-ifelse(Male_sel_18<0.09374586,1,0)
+m2018b<-ifelse(Male_sel_18<0.09374586,0,1)
+f2018<-ifelse(Female_sel_18>(-0.4853156),1,0)
+f2018b<-ifelse(Female_sel_18>(-0.4853156),0,1)
+
+sum(m2018)
+sum(m2018b)
+sum(f2018)
+sum(f2018b)
+
+p<-sum(m2018)/1000*sum(f2018)/1000
+p
+
+
+m2019<-ifelse(Male_sel_19>-0.2069016,1,0)
+m2019b<-ifelse(Male_sel_19>-0.2069016,0,1)
+f2019<-ifelse(Female_sel_19<0.08781835,1,0)
+f2019b<-ifelse(Female_sel_19<0.08781835,0,1)
+
+sum(m2019)
+sum(m2019b)
+sum(f2019)
+sum(f2019b)
+
+p<-sum(m2019)/1000*sum(f2019)/1000
+p
+
+##compare within sex across years
+#females
+f2018<-ifelse(Female_sel_18>(-0.2069016),1,0)
+f2018b<-ifelse(Female_sel_18>(-0.2069016),0,1)
+f2019<-ifelse(Female_sel_19<0.09374586,1,0)
+f2019b<-ifelse(Female_sel_19<0.09374586,0,1)
+
+sum(f2018)
+sum(f2018b)
+sum(f2019)
+sum(f2019b)
+
+p<-sum(f2018)/1000*sum(f2019)/1000
+p
+
+#males
+m2018<-ifelse(Male_sel_18<(0.08781835),1,0)
+m2018b<-ifelse(Male_sel_18<(0.08781835),0,1)
+m2019<-ifelse(Male_sel_19>(-0.4853156),1,0)
+m2019b<-ifelse(Male_sel_19>(-0.4853156),0,1)
+
+sum(m2018)
+sum(m2018b)
+sum(m2019)
+sum(m2019b)
+
+p<-sum(m2018)/1000*sum(m2019)/1000
+p
+
+```
+
+##### **2018/2019 3 trait model**
+
+
+``` {r, pooled, nclude=T, warning=F, message=F, include=T, fig.height=8, fig.width=12}
+#pooled years----
+
+require(readr)
+require(tidyr)
+require(MCMCglmm)
+#data
+data2018<-read.csv("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense/data/data_2018.csv")
+data2019<-read.csv("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense/data/data_2019.csv")
+
+
+
+data2018$Male<-log(data2018$male_raw+1)*-1  #log transform 
+data2018$Female<-log(data2018$female_raw+1)*-1 #log transform
+data2018<-data2018%>%mutate(Site=SiteID)
+data2018<-data2018%>% 
+  unite(SiteID_Series,c("SiteID", "Year"))
+data2018<-data2018%>%mutate(Year="2018")
+
+
+data2019$Male<-log(data2019$male_raw+1)*-1 #log transform
+data2019$Female<-log(data2019$female_raw+1)*-1 #log transform
+data2019<-data2019%>%mutate(Site=SiteID)
+data2019<-data2019%>% 
+  unite(SiteID_Series,c("SiteID", "Year"))
+data2019<-data2019%>%mutate(Year="2019")
+
+
+data_2<-full_join(data2018, data2019) #join datasets
+
+#prior for three traits- from Houslay tutorial
+prior_E_B_fit_1px = list(R = list(V = diag(c(1,1,0.0001),3,3), nu = 1.002, fix = 3),
+                         G = list(G1 = list(V = diag(3), nu = 3,
+                                            alpha.mu = rep(0,3),
+                                            alpha.V = diag(25^2,3,3))))
+#set residual variance for fitness near 0
+prior_E_B_fit_1px$R$V[3,3]<-0.0001
+
+#2018/2019 3 trait model ----
+mod.122 <- MCMCglmm(cbind(Male, Female, rfit) ~ (trait-1),  
+                   random = ~us(trait):SiteID_Series ,
+                   rcov = ~us(trait):units, 
+                   family = c("gaussian", "gaussian", "gaussian"),
+                   data=data_2, 
+                   prior = prior_E_B_fit_1px, 
+                   verbose = FALSE,
+                   nitt=590000,thin=500,burnin=90000
+)
+
+plot(mod.122)
+summary(mod.122)
+
+#auto-correlation
+autocorr.diag(mod.122$VCV)
+autocorr(mod.122$Sol)
+```
+
+##### **Among and within-pair correlations and selection gradients-- 2018/2019 3 trait model**
+
+```{r plotmod122, include=T, warning=F, message=F}
+
+# posteriors
+require(bayestestR)
+require(ggplot2)
+posteriors_3<-as.mcmc(mod.122$VCV)
+
+
+# among-pair correlations
+pair.correlation_33<-posteriors_3[,"traitFemale:traitMale.SiteID_Series"]/
+  sqrt(posteriors_3[,"traitFemale:traitFemale.SiteID_Series"]*
+         posteriors_3[,"traitMale:traitMale.SiteID_Series"])
+
+posterior.mode(pair.correlation_33)
+HPDinterval(pair.correlation_33)
+paircor<-as.data.frame(pair.correlation_33)
+describe_posterior(paircor)
+plot(pd(paircor$var1))+theme_classic()
+
+# within-pair correlations (residuals)
+residual.correlation_33<-posteriors_3[,"traitFemale:traitMale.units"]/
+  sqrt(posteriors_3[,"traitFemale:traitFemale.units"]*
+         posteriors_3[,"traitMale:traitMale.units"])
+
+posterior.mode(residual.correlation_33)
+HPDinterval(residual.correlation_33)
+withincor<-as.data.frame(residual.correlation_33)
+describe_posterior(withincor)
+plot(pd(withincor$var1))+theme_classic()
+
+
+#male selection gradient
+Male_sel<- posteriors_3[,"traitrfit:traitMale.SiteID_Series"]/
+  (sqrt(posteriors_3[,"traitrfit:traitrfit.SiteID_Series"])*
+     sqrt(posteriors_3[,"traitMale:traitMale.SiteID_Series"]))
+posterior.mode(Male_sel)
+HPDinterval(Male_sel)
+
+male<-as.data.frame(Male_sel)
+describe_posterior(male)
+plot(pd(male$var1))+theme_classic()
+#female selection gradient
+Female_sel<- posteriors_3[,"traitrfit:traitFemale.SiteID_Series"]/
+  (sqrt(posteriors_3[,"traitrfit:traitrfit.SiteID_Series"])*
+     sqrt(posteriors_3[,"traitFemale:traitFemale.SiteID_Series"]))
+posterior.mode(Female_sel)
+HPDinterval(Female_sel)
+
+
+female<-as.data.frame(Female_sel)
+plot(pd(female$var1))+theme_classic()
+describe_posterior(female)
+plot(pd(female$var1))+theme_classic()
+```
+
+
+##### **Correlation Plot**
+
+```{r corrplot, message=F, warning=F}
+
+### create data frame and within-subject center for plot
+
+require(tidyr)
+
+df_mcmc_cors <- data_frame(Traits = c("Among-pair (2018)",    
+                                      "Within-pair (2018)",
+                                      "Among-pair (2019)",
+                                      "Within-pair (2019)",
+                                      "Among-pair (Pooled)",
+                                      "Within-pair (Pooled)"
+                                        ),
+                           Estimate = c(posterior.mode(pair.correlation_3),
+                                        posterior.mode(residual.correlation_3),
+                                        posterior.mode(pair.correlation_4),
+                                        posterior.mode(residual.correlation4),
+                                        posterior.mode(pair.correlation_33),
+                                        posterior.mode(residual.correlation_33)),
+                           Lower = c(HPDinterval(pair.correlation_3)[,"lower"],
+                                     HPDinterval(residual.correlation_3)[,"lower"],
+                                     HPDinterval(pair.correlation_4)[,"lower"],
+                                     HPDinterval(residual.correlation4)[,"lower"],
+                                     HPDinterval(pair.correlation_33)[,"lower"],
+                                     HPDinterval(residual.correlation_33)[,"lower"]
+                                     ),
+                           Upper = c(HPDinterval(pair.correlation_3)[,"upper"],
+                                     HPDinterval(residual.correlation_3)[,"upper"],
+                                     HPDinterval(pair.correlation_4)[,"upper"],
+                                     HPDinterval(residual.correlation4)[,"upper"],
+                                     HPDinterval(pair.correlation_33)[,"upper"],
+                                     HPDinterval(residual.correlation_33)[,"upper"]
+                                     ))
+
+
+
+
+correlation1<-ggplot(df_mcmc_cors, aes(x = Traits, y = Estimate)) +
+  geom_pointrange(aes(ymin = Lower,
+                      ymax = Upper)) +
+  geom_hline(yintercept = 0,
+             linetype = "dotted",alpha = 0.35, size=0.3) +
+  labs(x = "",
+       y = "Correlation (Estimate +/- 95% CIs)") +
+  ylim(-1,1) +
+  coord_flip() + theme_classic()
+
+
+
+
+
+df_mcmc_cors1 <- data_frame(Traits = c("Female (2018)",    
+                                      "Male (2018)",
+                                      "Female (2019)",
+                                      "Male (2019)",
+                                      "Female (Pooled)",
+                                      "Male (Pooled)"
+),
+Estimate = c(posterior.mode(Female_sel_18),
+             posterior.mode(Male_sel_18),
+             posterior.mode(Female_sel_19),
+             posterior.mode(Male_sel_19),
+             posterior.mode(Female_sel),
+             posterior.mode(Male_sel)
+             ),
+Lower = c(HPDinterval(Female_sel_18)[,"lower"],
+          HPDinterval(Male_sel_18)[,"lower"],
+          HPDinterval(Female_sel_19)[,"lower"],
+          HPDinterval(Male_sel_19)[,"lower"],
+          HPDinterval(Female_sel)[,"lower"],
+          HPDinterval(Male_sel)[,"lower"]
+),
+Upper = c(HPDinterval(Female_sel_18)[,"upper"],
+          HPDinterval(Male_sel_18)[,"upper"],
+          HPDinterval(Female_sel_19)[,"upper"],
+          HPDinterval(Male_sel_19)[,"upper"],
+          HPDinterval(Female_sel)[,"upper"],
+          HPDinterval(Male_sel)[,"upper"]
+          ))
+
+
+
+
+correlation2<-ggplot(df_mcmc_cors1, aes(x = Traits, y = Estimate)) +
+  geom_pointrange(aes(ymin = Lower,
+                      ymax = Upper)) +
+  geom_hline(yintercept = 0,
+             linetype = "dotted",alpha = 0.35, size=0.3) +
+  labs(x = "",
+       y = "Correlation (Estimate +/- 95% CIs)") +
+  ylim(-1,1) +
+  coord_flip() + theme_classic()
+
+require(cowplot)
+plot_grid(correlation1,correlation2, labels = c("A.", "B."), nrow = 1)
+
+
+
+```
