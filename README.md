@@ -1,6 +1,6 @@
 
 
-![Picture2 (2)](https://user-images.githubusercontent.com/56907107/168872856-4bbd7c7d-eb2d-42dc-ab8c-79e7b97adba5.jpg)
+# ![Picture2 (2)](https://user-images.githubusercontent.com/56907107/168872856-4bbd7c7d-eb2d-42dc-ab8c-79e7b97adba5.jpg)
 
 # NuWCRU-- Does fluctuating selection maintain variation in nest defense behavior in Arctic peregrine falcons (_Falco peregrinus tundrius_)?
 
@@ -13,8 +13,6 @@ This work was conducted near the community of Rankin Inlet, Nunavut, Canada (62�
 ## General Project File Structure
 
 ```
-├── .gitignore                                                     <- Files that should be ignored by git. 
-|
 ├── README.md                                                      <- The top-level README including general project descriptions
 |
 ├── data
@@ -24,8 +22,9 @@ This work was conducted near the community of Rankin Inlet, Nunavut, Canada (62�
 │   └── nest_defense_test_final_20220318.csv                       <- Data ready for modeling
 │
 └── scripts
-    ├── State_dependence_repeatability_NestDefense_PEFA.R          <- all models combined
-
+    ├── State_dependence_repeatability_NestDefense_Rmd_files       <- folder that holds figures displayed in markdown file
+    ├── State_dependence_repeatability_NestDefense_PEFA.R          <- all models combined used in main text and ESM
+    └── State_dependence_repeatability_NestDefense_PEFA.md         <- markdown file with model output and figures
 
 ```
 
@@ -34,6 +33,10 @@ This work was conducted near the community of Rankin Inlet, Nunavut, Canada (62�
   * **data_2019**- data used for assortative mating and selection gradients for 2018 
   * **nest_defense_test_final**- data used for main effects (Raw data that is used to produce data_2018 and data_2019 data frames)
   * **nest_defense_test_final_20220318**- data used for correlations across breeding contexts
+
+## Markdown file
+* Click the link below to access markdown file with full workflow and output from each model. 
+* https://github.com/nuwcru/Rankin_Inlet-Nest_Defense_PEFA/blob/main/scripts/State_dependence_repeatability_NestDefense_Rmd.md
 
 ## Authors
 * Nick Gulotta, University of Georgia (Nickolas.Gulotta@uga.edu)
