@@ -14,11 +14,12 @@ require(tidyverse)
 require(rlang)
 require(ggeffects)
 require(arm)
+require(bayestestR)
 
 # Set wd
 setwd("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense")
 #load data
-data<-read.csv("data/nest_defense_test_final.csv")
+data<-read.csv("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense/data/nest_defense_test_final.csv")
 names(data)
 ```
 
@@ -136,20 +137,20 @@ posterior.mode(smfixef)
 ```
 
     ##            (Intercept)                SexMale   NestStage2Incubating 
-    ##             3.08833254            -0.33979478            -0.20796857 
+    ##             2.95755253            -0.32165926            -0.34651069 
     ## NestStage3Provisioning                 Year21 
-    ##            -0.57818137             0.09957685
+    ##            -0.57708585             0.04610777
 
 ``` r
 HPDinterval(smfixef)
 ```
 
-    ##                             lower       upper
-    ## (Intercept)             2.7000695  3.29185092
-    ## SexMale                -0.5626121 -0.02148813
-    ## NestStage2Incubating   -0.4471288 -0.03099244
-    ## NestStage3Provisioning -0.7853677 -0.35233510
-    ## Year21                 -0.1192943  0.29391231
+    ##                             lower        upper
+    ## (Intercept)             2.6786072  3.241665826
+    ## SexMale                -0.5686800 -0.082192731
+    ## NestStage2Incubating   -0.4935030 -0.005439134
+    ## NestStage3Provisioning -0.8374805 -0.316453515
+    ## Year21                 -0.1224068  0.280049520
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -161,14 +162,14 @@ posterior.mode(bvar )## mode of the distribution
 ```
 
     ##      var1 
-    ## 0.3311147
+    ## 0.3058755
 
 ``` r
 HPDinterval(bvar)
 ```
 
     ##          lower     upper
-    ## var1 0.2286352 0.3628702
+    ## var1 0.2403821 0.3756089
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -180,14 +181,14 @@ posterior.mode(ObsVar )## mode of the distribution
 ```
 
     ##       var1 
-    ## 0.02541443
+    ## 0.02674039
 
 ``` r
 HPDinterval(ObsVar)
 ```
 
     ##            lower      upper
-    ## var1 0.009230029 0.05345309
+    ## var1 0.006428476 0.05186463
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -198,14 +199,14 @@ posterior.mode(rvar)
 ```
 
     ##      var1 
-    ## 0.4869391
+    ## 0.5433952
 
 ``` r
 HPDinterval(rvar)
 ```
 
     ##          lower    upper
-    ## var1 0.4655054 0.611815
+    ## var1 0.4547437 0.600484
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -216,15 +217,15 @@ r <- bvar/(bvar + rvar) ###individual
 posterior.mode(r)
 ```
 
-    ##      var1 
-    ## 0.3573126
+    ##     var1 
+    ## 0.372503
 
 ``` r
 HPDinterval(r)
 ```
 
-    ##          lower     upper
-    ## var1 0.3069508 0.4205744
+    ##         lower     upper
+    ## var1 0.328285 0.4228402
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -308,20 +309,20 @@ posterior.mode(smfixef)
 ```
 
     ##            (Intercept)                SexMale   NestStage2Incubating 
-    ##              3.0205773             -0.2293972             -0.2629506 
+    ##             2.96764360            -0.11546157            -0.25517327 
     ## NestStage3Provisioning                 Year21 
-    ##             -0.6139531              0.1798510
+    ##            -0.62436059             0.08778879
 
 ``` r
 HPDinterval(smfixef)
 ```
 
-    ##                              lower      upper
-    ## (Intercept)             2.70940665  3.3879695
-    ## SexMale                -0.45240350  0.1943825
-    ## NestStage2Incubating   -0.53410616 -0.1092220
-    ## NestStage3Provisioning -0.81906177 -0.2953445
-    ## Year21                 -0.05698162  0.3884333
+    ##                             lower       upper
+    ## (Intercept)             2.7462436  3.28774342
+    ## SexMale                -0.4699911  0.18781813
+    ## NestStage2Incubating   -0.5698473 -0.06977418
+    ## NestStage3Provisioning -0.8474040 -0.33283664
+    ## Year21                 -0.1186940  0.38152053
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -333,14 +334,14 @@ posterior.mode(bvar )## mode of the distribution
 ```
 
     ##      var1 
-    ## 0.3533804
+    ## 0.3255504
 
 ``` r
 HPDinterval(bvar)
 ```
 
-    ##          lower     upper
-    ## var1 0.2564606 0.4070926
+    ##         lower     upper
+    ## var1 0.255575 0.4166346
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -352,14 +353,14 @@ posterior.mode(ObsVar )## mode of the distribution
 ```
 
     ##       var1 
-    ## 0.06015887
+    ## 0.06394288
 
 ``` r
 HPDinterval(ObsVar)
 ```
 
-    ##          lower     upper
-    ## var1 0.0154506 0.1266427
+    ##           lower     upper
+    ## var1 0.02417646 0.1330345
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -370,14 +371,14 @@ posterior.mode(rvar)
 ```
 
     ##      var1 
-    ## 0.5940656
+    ## 0.6242328
 
 ``` r
 HPDinterval(rvar)
 ```
 
-    ##         lower     upper
-    ## var1 0.531788 0.6921465
+    ##          lower     upper
+    ## var1 0.5343964 0.7254473
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -389,14 +390,14 @@ posterior.mode(r)
 ```
 
     ##      var1 
-    ## 0.3592548
+    ## 0.3436217
 
 ``` r
 HPDinterval(r)
 ```
 
     ##          lower     upper
-    ## var1 0.2953174 0.4068641
+    ## var1 0.3039536 0.4015338
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -458,20 +459,20 @@ posterior.mode(smfixef)
 ```
 
     ##            (Intercept)                SexMale   NestStage2Incubating 
-    ##              0.6093745              0.4388507              0.2153490 
+    ##              0.7291545              0.7512464              0.2698439 
     ## NestStage3Provisioning                 Year21 
-    ##              0.2824816             -0.3173581
+    ##              0.1727342             -0.3637808
 
 ``` r
 HPDinterval(smfixef)
 ```
 
     ##                              lower      upper
-    ## (Intercept)             0.03979586  1.1710486
-    ## SexMale                 0.03775549  1.0191727
-    ## NestStage2Incubating    0.03551563  0.3732263
-    ## NestStage3Provisioning  0.03256656  0.3668102
-    ## Year21                 -0.55389085 -0.1402812
+    ## (Intercept)             0.03873504  1.2123964
+    ## SexMale                 0.10145937  1.1103779
+    ## NestStage2Incubating    0.04545238  0.3302535
+    ## NestStage3Provisioning  0.05887201  0.3602547
+    ## Year21                 -0.50061721 -0.1084545
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -483,14 +484,14 @@ posterior.mode(bvar )## mode of the distribution
 ```
 
     ##     var1 
-    ## 1.416244
+    ## 1.348538
 
 ``` r
 HPDinterval(bvar)
 ```
 
     ##         lower    upper
-    ## var1 1.165077 1.591031
+    ## var1 1.239504 1.636202
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -501,15 +502,15 @@ ObsVar<-as.mcmc(ObsVar)
 posterior.mode(ObsVar )## mode of the distribution
 ```
 
-    ##      var1 
-    ## 0.3010622
+    ##    var1 
+    ## 0.26155
 
 ``` r
 HPDinterval(ObsVar)
 ```
 
     ##          lower     upper
-    ## var1 0.2121155 0.3917127
+    ## var1 0.1865145 0.3733216
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -521,14 +522,14 @@ posterior.mode(r)
 ```
 
     ##      var1 
-    ## 0.5861543
+    ## 0.5742283
 
 ``` r
 HPDinterval(r)
 ```
 
     ##          lower     upper
-    ## var1 0.5381226 0.6140532
+    ## var1 0.5534726 0.6206664
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -620,20 +621,20 @@ posterior.mode(smfixef)
 ```
 
     ##            (Intercept)                SexMale   NestStage2Incubating 
-    ##             4.51222285             0.45251010            -0.46461403 
+    ##             4.39266711             0.33434294            -0.49320460 
     ## NestStage3Provisioning                 Year21 
-    ##            -0.09900085            -0.21756572
+    ##            -0.02655185            -0.23058342
 
 ``` r
 HPDinterval(smfixef)
 ```
 
-    ##                              lower       upper
-    ## (Intercept)             4.15412198  4.67560351
-    ## SexMale                 0.07350174  0.60272463
-    ## NestStage2Incubating   -0.83880159 -0.20879347
-    ## NestStage3Provisioning -0.33251104  0.18418679
-    ## Year21                 -0.46087587 -0.06194758
+    ##                             lower       upper
+    ## (Intercept)             4.0373574  4.69430651
+    ## SexMale                 0.1054760  0.69685657
+    ## NestStage2Incubating   -0.7065227 -0.07776713
+    ## NestStage3Provisioning -0.3233181  0.21537957
+    ## Year21                 -0.4895097  0.02834393
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -645,14 +646,14 @@ posterior.mode(bvar )## mode of the distribution
 ```
 
     ##      var1 
-    ## 0.1954916
+    ## 0.1990451
 
 ``` r
 HPDinterval(bvar)
 ```
 
-    ##         lower     upper
-    ## var1 0.158074 0.2817802
+    ##          lower     upper
+    ## var1 0.1501821 0.2524033
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -682,14 +683,14 @@ posterior.mode(rvar)
 ```
 
     ##      var1 
-    ## 0.5940656
+    ## 0.6242328
 
 ``` r
 HPDinterval(rvar)
 ```
 
-    ##         lower     upper
-    ## var1 0.531788 0.6921465
+    ##          lower     upper
+    ## var1 0.5343964 0.7254473
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -701,14 +702,14 @@ posterior.mode(r)
 ```
 
     ##      var1 
-    ## 0.2364131
+    ## 0.2560536
 
 ``` r
 HPDinterval(r)
 ```
 
     ##          lower     upper
-    ## var1 0.1973126 0.3191477
+    ## var1 0.1958458 0.2852105
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -739,34 +740,34 @@ summary(m3FID)
     ##  Thinning interval  = 1000
     ##  Sample size  = 1000 
     ## 
-    ##  DIC: 908.0425 
+    ##  DIC: 908.1827 
     ## 
     ##  G-structure:  ~us(trait):ID
     ## 
     ##                              post.mean l-95% CI u-95% CI eff.samp
-    ## traitlogLFID:traitlogLFID.ID  0.559285  0.24129  0.91678   1236.2
-    ## traitlogIFID:traitlogLFID.ID -0.006203 -0.25459  0.28570   1308.1
-    ## traitlogPFID:traitlogLFID.ID -0.213534 -0.57595  0.09209   1430.5
-    ## traitlogLFID:traitlogIFID.ID -0.006203 -0.25459  0.28570   1308.1
-    ## traitlogIFID:traitlogIFID.ID  0.475407  0.22444  0.77720   1120.0
-    ## traitlogPFID:traitlogIFID.ID  0.181792 -0.08561  0.44338   1157.4
-    ## traitlogLFID:traitlogPFID.ID -0.213534 -0.57595  0.09209   1430.5
-    ## traitlogIFID:traitlogPFID.ID  0.181792 -0.08561  0.44338   1157.4
-    ## traitlogPFID:traitlogPFID.ID  0.651207  0.28391  1.00965    868.7
+    ## traitlogLFID:traitlogLFID.ID   0.55751  0.25930   0.8719   1000.0
+    ## traitlogIFID:traitlogLFID.ID  -0.01313 -0.26799   0.2662   1000.0
+    ## traitlogPFID:traitlogLFID.ID  -0.21748 -0.54723   0.1044    910.5
+    ## traitlogLFID:traitlogIFID.ID  -0.01313 -0.26799   0.2662   1000.0
+    ## traitlogIFID:traitlogIFID.ID   0.47057  0.22826   0.7740   1000.0
+    ## traitlogPFID:traitlogIFID.ID   0.17132 -0.06681   0.4235   1000.0
+    ## traitlogLFID:traitlogPFID.ID  -0.21748 -0.54723   0.1044    910.5
+    ## traitlogIFID:traitlogPFID.ID   0.17132 -0.06681   0.4235   1000.0
+    ## traitlogPFID:traitlogPFID.ID   0.64825  0.28315   1.0145   1000.0
     ## 
     ##  R-structure:  ~idh(trait):units
     ## 
     ##                    post.mean l-95% CI u-95% CI eff.samp
-    ## traitlogLFID.units    0.5618   0.3140   0.8448      833
-    ## traitlogIFID.units    0.9685   0.7067   1.2844     1000
-    ## traitlogPFID.units    0.7311   0.5061   0.9388     1000
+    ## traitlogLFID.units    0.5612   0.3193   0.8391     1000
+    ## traitlogIFID.units    0.9785   0.6604   1.2727     1000
+    ## traitlogPFID.units    0.7330   0.5214   0.9765     1225
     ## 
     ##  Location effects: cbind(logLFID, logIFID, logPFID) ~ (trait - 1) 
     ## 
     ##              post.mean l-95% CI u-95% CI eff.samp  pMCMC    
-    ## traitlogLFID     4.434    4.219    4.702   1000.0 <0.001 ***
-    ## traitlogIFID     3.925    3.664    4.155   1000.0 <0.001 ***
-    ## traitlogPFID     4.284    4.025    4.556    740.7 <0.001 ***
+    ## traitlogLFID     4.435    4.181    4.658   1000.0 <0.001 ***
+    ## traitlogIFID     3.918    3.677    4.178    791.4 <0.001 ***
+    ## traitlogPFID     4.287    4.018    4.554   1000.0 <0.001 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -784,15 +785,15 @@ round(apply(c1,2,mean),2)
 ```
 
     ##  var1  var2  var3  var4  var5  var6  var7  var8  var9 
-    ##  1.00 -0.01 -0.34 -0.01  1.00  0.32 -0.34  0.32  1.00
+    ##  1.00 -0.02 -0.35 -0.02  1.00  0.31 -0.35  0.31  1.00
 
 ``` r
 round(apply(c1,2, quantile, c(0.025, 0.975)),2)
 ```
 
     ##       var1  var2  var3  var4 var5  var6  var7  var8 var9
-    ## 2.5%     1 -0.50 -0.71 -0.50    1 -0.10 -0.71 -0.10    1
-    ## 97.5%    1  0.46  0.17  0.46    1  0.65  0.17  0.65    1
+    ## 2.5%     1 -0.51 -0.73 -0.51    1 -0.12 -0.73 -0.12    1
+    ## 97.5%    1  0.49  0.15  0.49    1  0.63  0.15  0.63    1
 
 #### **Multivariate: minimum approach distance across breeding contexts**
 
@@ -813,34 +814,34 @@ summary(m3Min)
     ##  Thinning interval  = 1000
     ##  Sample size  = 1000 
     ## 
-    ##  DIC: 844.134 
+    ##  DIC: 844.1679 
     ## 
     ##  G-structure:  ~us(trait):ID
     ## 
     ##                                    post.mean l-95% CI u-95% CI eff.samp
-    ## traitlogLMinDis:traitlogLMinDis.ID    0.5396  0.21621   0.8942     1000
-    ## traitlogIMinDis:traitlogLMinDis.ID    0.1611 -0.07760   0.4186     1000
-    ## traitlogPMinDis:traitlogLMinDis.ID    0.1419 -0.10069   0.4236     1000
-    ## traitlogLMinDis:traitlogIMinDis.ID    0.1611 -0.07760   0.4186     1000
-    ## traitlogIMinDis:traitlogIMinDis.ID    0.5706  0.30496   0.8546     1000
-    ## traitlogPMinDis:traitlogIMinDis.ID    0.2676  0.02998   0.5433     1000
-    ## traitlogLMinDis:traitlogPMinDis.ID    0.1419 -0.10069   0.4236     1000
-    ## traitlogIMinDis:traitlogPMinDis.ID    0.2676  0.02998   0.5433     1000
-    ## traitlogPMinDis:traitlogPMinDis.ID    0.6275  0.32089   0.9900     1037
+    ## traitlogLMinDis:traitlogLMinDis.ID    0.5464  0.21668   0.9298     1000
+    ## traitlogIMinDis:traitlogLMinDis.ID    0.1573 -0.07745   0.4493     1000
+    ## traitlogPMinDis:traitlogLMinDis.ID    0.1408 -0.11714   0.3999     1000
+    ## traitlogLMinDis:traitlogIMinDis.ID    0.1573 -0.07745   0.4493     1000
+    ## traitlogIMinDis:traitlogIMinDis.ID    0.5701  0.30750   0.9402     1137
+    ## traitlogPMinDis:traitlogIMinDis.ID    0.2670  0.04265   0.5457     1000
+    ## traitlogLMinDis:traitlogPMinDis.ID    0.1408 -0.11714   0.3999     1000
+    ## traitlogIMinDis:traitlogPMinDis.ID    0.2670  0.04265   0.5457     1000
+    ## traitlogPMinDis:traitlogPMinDis.ID    0.6234  0.33845   0.9875     1122
     ## 
     ##  R-structure:  ~idh(trait):units
     ## 
     ##                       post.mean l-95% CI u-95% CI eff.samp
-    ## traitlogLMinDis.units    0.6782   0.3911   1.0580    883.4
-    ## traitlogIMinDis.units    0.6120   0.4258   0.8131   1000.0
-    ## traitlogPMinDis.units    0.5768   0.3789   0.7428   1000.0
+    ## traitlogLMinDis.units    0.6722   0.3777   1.0304    953.4
+    ## traitlogIMinDis.units    0.6084   0.4326   0.8075   1000.0
+    ## traitlogPMinDis.units    0.5765   0.3977   0.7692   1000.0
     ## 
     ##  Location effects: cbind(logLMinDis, logIMinDis, logPMinDis) ~ (trait - 1) 
     ## 
     ##                 post.mean l-95% CI u-95% CI eff.samp  pMCMC    
-    ## traitlogLMinDis     2.990    2.742    3.262     1000 <0.001 ***
-    ## traitlogIMinDis     2.728    2.502    2.967     1000 <0.001 ***
-    ## traitlogPMinDis     2.411    2.176    2.662     1000 <0.001 ***
+    ## traitlogLMinDis     2.990    2.744    3.253     1000 <0.001 ***
+    ## traitlogIMinDis     2.727    2.487    2.950     1000 <0.001 ***
+    ## traitlogPMinDis     2.420    2.149    2.673     1000 <0.001 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -858,15 +859,15 @@ round(apply(c1,2,mean),2)
 ```
 
     ## var1 var2 var3 var4 var5 var6 var7 var8 var9 
-    ## 1.00 0.29 0.24 0.29 1.00 0.45 0.24 0.45 1.00
+    ## 1.00 0.28 0.24 0.28 1.00 0.45 0.24 0.45 1.00
 
 ``` r
 round(apply(c1,2, quantile, c(0.025, 0.975)),2)
 ```
 
     ##       var1  var2  var3  var4 var5 var6  var7 var8 var9
-    ## 2.5%     1 -0.15 -0.21 -0.15    1 0.06 -0.21 0.06    1
-    ## 97.5%    1  0.64  0.62  0.64    1 0.72  0.62 0.72    1
+    ## 2.5%     1 -0.16 -0.19 -0.16    1 0.07 -0.19 0.07    1
+    ## 97.5%    1  0.64  0.60  0.64    1 0.73  0.60 0.73    1
 
 #### **Multivariate: number of dives across breeding contexts**
 
@@ -887,34 +888,34 @@ summary(m3Dives)
     ##  Thinning interval  = 1000
     ##  Sample size  = 1000 
     ## 
-    ##  DIC: 1273.266 
+    ##  DIC: 1273.45 
     ## 
     ##  G-structure:  ~us(trait):ID
     ## 
     ##                            post.mean l-95% CI u-95% CI eff.samp
-    ## traitLdives:traitLdives.ID    1.8945  0.62505    3.588     1000
-    ## traitIdives:traitLdives.ID    0.8946  0.01679    1.906     1000
-    ## traitPdives:traitLdives.ID    1.6231  0.22937    3.198     1000
-    ## traitLdives:traitIdives.ID    0.8946  0.01679    1.906     1000
-    ## traitIdives:traitIdives.ID    1.4335  0.60375    2.400     1000
-    ## traitPdives:traitIdives.ID    1.6456  0.66309    2.804     1000
-    ## traitLdives:traitPdives.ID    1.6231  0.22937    3.198     1000
-    ## traitIdives:traitPdives.ID    1.6456  0.66309    2.804     1000
-    ## traitPdives:traitPdives.ID    3.3148  1.16633    5.805      895
+    ## traitLdives:traitLdives.ID    1.9183  0.43338    3.561   1000.0
+    ## traitIdives:traitLdives.ID    0.9117  0.01088    1.864   1000.0
+    ## traitPdives:traitLdives.ID    1.6716  0.28369    3.231   1000.0
+    ## traitLdives:traitIdives.ID    0.9117  0.01088    1.864   1000.0
+    ## traitIdives:traitIdives.ID    1.4481  0.68782    2.520   1000.0
+    ## traitPdives:traitIdives.ID    1.6688  0.69375    2.759   1000.0
+    ## traitLdives:traitPdives.ID    1.6716  0.28369    3.231   1000.0
+    ## traitIdives:traitPdives.ID    1.6688  0.69375    2.759   1000.0
+    ## traitPdives:traitPdives.ID    3.3506  1.43398    5.724    920.3
     ## 
     ##  R-structure:  ~idh(trait):units
     ## 
     ##                   post.mean l-95% CI u-95% CI eff.samp
-    ## traitLdives.units     1.853   0.7292    3.426     1000
-    ## traitIdives.units     1.254   0.6469    1.976     1000
-    ## traitPdives.units     2.205   1.1280    3.501     1000
+    ## traitLdives.units     1.880   0.5683    3.337     1000
+    ## traitIdives.units     1.250   0.6324    1.982     1000
+    ## traitPdives.units     2.207   1.2036    3.602     1000
     ## 
     ##  Location effects: cbind(Ldives, Idives, Pdives) ~ (trait - 1) 
     ## 
-    ##             post.mean  l-95% CI  u-95% CI eff.samp pMCMC   
-    ## traitLdives  0.389988 -0.213961  0.910237   1000.0 0.176   
-    ## traitIdives  0.782277  0.365044  1.191333    979.0 0.002 **
-    ## traitPdives  0.001346 -0.671476  0.702882    909.9 0.930   
+    ##             post.mean l-95% CI u-95% CI eff.samp  pMCMC    
+    ## traitLdives   0.36643 -0.20724  0.86361     1148  0.208    
+    ## traitIdives   0.77828  0.35092  1.16939     1000 <0.001 ***
+    ## traitPdives  -0.02093 -0.66013  0.63021     1000  0.992    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -932,15 +933,15 @@ round(apply(c1,2,mean),2)
 ```
 
     ## var1 var2 var3 var4 var5 var6 var7 var8 var9 
-    ## 1.00 0.55 0.66 0.55 1.00 0.76 0.66 0.76 1.00
+    ## 1.00 0.55 0.66 0.55 1.00 0.77 0.66 0.77 1.00
 
 ``` r
 round(apply(c1,2, quantile, c(0.025, 0.975)),2)
 ```
 
     ##       var1 var2 var3 var4 var5 var6 var7 var8 var9
-    ## 2.5%     1 0.02  0.2 0.02    1 0.50  0.2 0.50    1
-    ## 97.5%    1 0.84  0.9 0.84    1 0.91  0.9 0.91    1
+    ## 2.5%     1 0.06 0.22 0.06    1 0.52 0.22 0.52    1
+    ## 97.5%    1 0.84 0.90 0.84    1 0.91 0.90 0.91    1
 
 ### **3. Bivariate model with minimum distance and number of dives**
 
@@ -973,29 +974,29 @@ summary(model.2var)
     ##  Thinning interval  = 1000
     ##  Sample size  = 1000 
     ## 
-    ##  DIC: 2337.396 
+    ##  DIC: 2337.576 
     ## 
     ##  G-structure:  ~us(trait):ID
     ## 
     ##                            post.mean l-95% CI u-95% CI eff.samp
-    ## traitLogMin:traitLogMin.ID    0.3874   0.2358   0.5654    745.5
-    ## traitDives:traitLogMin.ID    -0.5326  -0.8236  -0.2508   1000.0
-    ## traitLogMin:traitDives.ID    -0.5326  -0.8236  -0.2508   1000.0
-    ## traitDives:traitDives.ID      1.2911   0.6463   2.0444   1000.0
+    ## traitLogMin:traitLogMin.ID    0.3886   0.2246   0.5740     1000
+    ## traitDives:traitLogMin.ID    -0.5289  -0.8495  -0.2625     1000
+    ## traitLogMin:traitDives.ID    -0.5289  -0.8495  -0.2625     1000
+    ## traitDives:traitDives.ID      1.2839   0.6234   1.9662     1000
     ## 
     ##  R-structure:  ~us(trait):units
     ## 
     ##                               post.mean l-95% CI u-95% CI eff.samp
-    ## traitLogMin:traitLogMin.units    0.7279   0.6047   0.8476     1124
-    ## traitDives:traitLogMin.units    -0.6257  -0.8262  -0.4488     1000
-    ## traitLogMin:traitDives.units    -0.6257  -0.8262  -0.4488     1000
-    ## traitDives:traitDives.units      1.8923   1.3736   2.4341     1000
+    ## traitLogMin:traitLogMin.units    0.7270   0.6082   0.8496     1000
+    ## traitDives:traitLogMin.units    -0.6264  -0.8127  -0.4455     1000
+    ## traitLogMin:traitDives.units    -0.6264  -0.8127  -0.4455     1000
+    ## traitDives:traitDives.units      1.9023   1.3247   2.4346     1000
     ## 
     ##  Location effects: cbind(LogMin, Dives) ~ trait - 1 
     ## 
     ##             post.mean l-95% CI u-95% CI eff.samp  pMCMC    
-    ## traitLogMin    2.7263   2.5765   2.8982     1000 <0.001 ***
-    ## traitDives     0.4753   0.1574   0.7742     1000  0.008 ** 
+    ## traitLogMin    2.7326   2.5446   2.8657   1059.8 <0.001 ***
+    ## traitDives     0.4688   0.1747   0.7981    906.9  0.006 ** 
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -1020,8 +1021,8 @@ round(apply(c1,2, quantile, c(0.025, 0.975)),2)
 ```
 
     ##       var1  var2  var3 var4
-    ## 2.5%     1 -0.90 -0.90    1
-    ## 97.5%    1 -0.55 -0.55    1
+    ## 2.5%     1 -0.91 -0.91    1
+    ## 97.5%    1 -0.54 -0.54    1
 
 ``` r
 #within individual covariance
@@ -1037,7 +1038,7 @@ round(apply(c2,2, quantile, c(0.025, 0.975)),2)
 ```
 
     ##       var1  var2  var3 var4
-    ## 2.5%     1 -0.63 -0.63    1
+    ## 2.5%     1 -0.62 -0.62    1
     ## 97.5%    1 -0.42 -0.42    1
 
 ### **4. Univariate model to estimate short-versus long-term repeatability with interaction**
@@ -1108,26 +1109,26 @@ posterior.mode(as.mcmc(smod@fixef))
 ```
 
     ##                    (Intercept)                        SexMale 
-    ##                      2.9330022                     -0.1093316 
+    ##                     2.99986806                    -0.09502282 
     ##           NestStage2Incubating         NestStage3Provisioning 
-    ##                     -0.2903931                     -0.5588811 
+    ##                    -0.22353166                    -0.54019552 
     ##                         Year21   SexMale:NestStage2Incubating 
-    ##                      0.3248029                     -0.2161740 
+    ##                     0.31988530                    -0.08104898 
     ## SexMale:NestStage3Provisioning 
-    ##                     -0.1866898
+    ##                    -0.10122815
 
 ``` r
 HPDinterval(as.mcmc(smod@fixef))
 ```
 
     ##                                      lower       upper
-    ## (Intercept)                     2.59737261  3.25798121
-    ## SexMale                        -0.43598170  0.37518093
-    ## NestStage2Incubating           -0.61399081  0.06147804
-    ## NestStage3Provisioning         -0.84947036 -0.24045567
-    ## Year21                          0.03816283  0.53728272
-    ## SexMale:NestStage2Incubating   -0.60611793  0.39964051
-    ## SexMale:NestStage3Provisioning -0.58793444  0.37624594
+    ## (Intercept)                     2.60820210  3.23379611
+    ## SexMale                        -0.45085061  0.38030185
+    ## NestStage2Incubating           -0.58696082  0.01250817
+    ## NestStage3Provisioning         -0.86710761 -0.26246579
+    ## Year21                          0.04168956  0.54261750
+    ## SexMale:NestStage2Incubating   -0.59361378  0.37716851
+    ## SexMale:NestStage3Provisioning -0.59915477  0.33692417
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1141,14 +1142,14 @@ posterior.mode(bvar )## mode of the distribution
 ```
 
     ##      var1 
-    ## 0.2973766
+    ## 0.2983444
 
 ``` r
 HPDinterval(bvar)
 ```
 
     ##          lower     upper
-    ## var1 0.2376711 0.4042282
+    ## var1 0.2190252 0.4015431
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1162,14 +1163,14 @@ posterior.mode(bvar2 )## mode of the distribution
 ```
 
     ##       var1 
-    ## 0.07526645
+    ## 0.07463647
 
 ``` r
 HPDinterval(bvar2)
 ```
 
     ##           lower      upper
-    ## var1 0.05550871 0.09805372
+    ## var1 0.05443475 0.09703907
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1180,15 +1181,15 @@ rvar<-as.mcmc(rvar)
 posterior.mode(rvar)
 ```
 
-    ##     var1 
-    ## 0.624986
+    ##      var1 
+    ## 0.6300381
 
 ``` r
 HPDinterval(rvar)
 ```
 
     ##          lower     upper
-    ## var1 0.5620613 0.7541064
+    ## var1 0.5506462 0.7431829
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1201,14 +1202,14 @@ posterior.mode(r)
 ```
 
     ##      var1 
-    ## 0.3082312
+    ## 0.3066759
 
 ``` r
 HPDinterval(r)  ##repeatability 
 ```
 
     ##          lower     upper
-    ## var1 0.2467317 0.3582906
+    ## var1 0.2460247 0.3589113
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1219,14 +1220,14 @@ posterior.mode(r1)
 ```
 
     ##      var1 
-    ## 0.3652779
+    ## 0.3874194
 
 ``` r
 HPDinterval(r1)  ##repeatability
 ```
 
     ##          lower     upper
-    ## var1 0.3248495 0.4270072
+    ## var1 0.3237235 0.4258156
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1236,7 +1237,23 @@ HPDinterval(r1)  ##repeatability
     for main text Table 1*
 
 ``` r
-m1<-lmer(LogMin~ Sex + NestStage + Year2+ (1|ID) + (1|ID_Series) ,
+cor.test(data$Stage, data$NumberOfChicks)#correlation b/n nest stage and number of chicks. r=0.78 thus drop Number of Chicks from model 
+```
+
+    ## 
+    ##  Pearson's product-moment correlation
+    ## 
+    ## data:  data$Stage and data$NumberOfChicks
+    ## t = 21.628, df = 367, p-value < 2.2e-16
+    ## alternative hypothesis: true correlation is not equal to 0
+    ## 95 percent confidence interval:
+    ##  0.6999745 0.7902693
+    ## sample estimates:
+    ##       cor 
+    ## 0.7485722
+
+``` r
+m1<-lmer(LogMin~ Sex + NestStage +Year2+ (1|ID) + (1|ID_Series) ,
          data=data) 
 #summary
 summary(m1)
@@ -1276,19 +1293,19 @@ summary(m1)
 
 ``` r
 #model check
-plot(m1.1)
+plot(m1)
 ```
 
 ![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/unvME-1.png)<!-- -->
 
 ``` r
-hist(resid(m1.1)) # residuals
+hist(resid(m1)) # residuals
 ```
 
 ![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/unvME-2.png)<!-- -->
 
 ``` r
-lattice::qqmath(m1.1) #normality of errors
+lattice::qqmath(m1) #normality of errors
 ```
 
 ![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/unvME-3.png)<!-- -->
@@ -1305,20 +1322,20 @@ posterior.mode(as.mcmc(smod@fixef))
 ```
 
     ##            (Intercept)                SexMale   NestStage2Incubating 
-    ##              3.0192488             -0.1779903             -0.3901342 
+    ##              3.0495242             -0.2080147             -0.3033702 
     ## NestStage3Provisioning                 Year21 
-    ##             -0.5815032              0.2245999
+    ##             -0.6118114              0.3475541
 
 ``` r
 HPDinterval(as.mcmc(smod@fixef))
 ```
 
-    ##                              lower       upper
-    ## (Intercept)             2.67462968  3.26476828
-    ## SexMale                -0.48086817  0.09771978
-    ## NestStage2Incubating   -0.55544368 -0.09348785
-    ## NestStage3Provisioning -0.84892295 -0.39398825
-    ## Year21                  0.05996998  0.55727867
+    ##                              lower      upper
+    ## (Intercept)             2.68360207  3.2377184
+    ## SexMale                -0.48246302  0.1179500
+    ## NestStage2Incubating   -0.57190482 -0.0910381
+    ## NestStage3Provisioning -0.83763041 -0.3738502
+    ## Year21                  0.03374575  0.5416054
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1332,14 +1349,14 @@ posterior.mode(bvar )## mode of the distribution
 ```
 
     ##      var1 
-    ## 0.3091472
+    ## 0.3051023
 
 ``` r
 HPDinterval(bvar)
 ```
 
     ##          lower     upper
-    ## var1 0.2379842 0.4000454
+    ## var1 0.2340063 0.4099514
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1353,14 +1370,14 @@ posterior.mode(bvar2 )## mode of the distribution
 ```
 
     ##       var1 
-    ## 0.06716235
+    ## 0.07605867
 
 ``` r
 HPDinterval(bvar2)
 ```
 
-    ##           lower      upper
-    ## var1 0.05263274 0.09617665
+    ##          lower      upper
+    ## var1 0.0549132 0.09993226
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1372,18 +1389,234 @@ posterior.mode(rvar)
 ```
 
     ##      var1 
-    ## 0.6249228
+    ## 0.6384209
 
 ``` r
 HPDinterval(rvar)
 ```
 
     ##          lower     upper
-    ## var1 0.5524257 0.7373092
+    ## var1 0.5551724 0.7509586
     ## attr(,"Probability")
     ## [1] 0.95
 
-##### **Long-term and short-term repeatability– Univariate model with no interaction**
+#### **Contrasts differences among-sexes**
+
+``` r
+#compute difference among-sexes
+
+p222<-smod@fixef[,1:2]#gather posterior for intercept(female) and Male 
+p222<-as.data.frame(p222)#make a dataframe to manipulate easier
+colnames(p222)<-c("Female", "SexMale")#change column names
+p22<-p222%>%
+  summarise(Male= Female+ SexMale)#add posteriors for Intercept to each value of Male
+
+con<-as.data.frame(c(p222, p22))#combine estimates into one dataframe
+
+difference<-con%>%
+  summarise(diff= Female - Male)#compute difference
+
+contrast<-as.data.frame(c(con, difference))#dataframe for contrasts
+
+require(bayestestR)
+describe_posterior(contrast)# pd is 87% for difference among sexes 
+```
+
+    ## Summary of Posterior Distribution
+    ## 
+    ## Parameter | Median |        95% CI |     pd |          ROPE | % in ROPE
+    ## -----------------------------------------------------------------------
+    ## Female    |   2.97 | [ 2.69, 3.25] |   100% | [-0.10, 0.10] |        0%
+    ## SexMale   |  -0.17 | [-0.46, 0.14] | 85.50% | [-0.10, 0.10] |    31.47%
+    ## Male      |   2.81 | [ 2.53, 3.12] |   100% | [-0.10, 0.10] |        0%
+    ## diff      |   0.17 | [-0.14, 0.46] | 85.50% | [-0.10, 0.10] |    31.47%
+
+``` r
+contable<-describe_posterior(contrast)#estimates for difference b/n male and female nest defense
+
+contab<-contable%>%filter(Parameter=="diff")
+
+
+plot(pd(contrast$diff))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast-1.png)<!-- -->
+
+``` r
+ggplot(contrast, aes(x=diff)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(contrast$diff), color="red", size=1)+
+   geom_vline(xintercept = (contab$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (contab$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between male and female defense",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast-2.png)<!-- -->
+
+#### **Contrast differences among-nest stages**
+
+``` r
+p2223<-smod@fixef[,3:4]#gather posterior for incubation and provisioning nest stages 
+p2223<-as.data.frame(p2223)#make a dataframe to manipulate easier
+p2224<-smod@fixef[,1]#extract intercept (estimate for egg-laying)
+p2224<-as.data.frame(p2224)
+colnames(p2224)<-"Intercept"
+
+nestcon<-as.data.frame(c(p2224, p2223))
+
+#compute estimates for each nest stage
+neststage<-nestcon%>%
+  summarise(Incubation   = Intercept  + NestStage2Incubating,
+            Provisioning = Intercept + NestStage3Provisioning,
+            EggLaying    = Intercept)#add posteriors for Intercept to each value of Male
+
+#compute differences between nest stage groups
+contrasts<-neststage%>%
+  summarise(diff_ie = Incubation-EggLaying,
+            diff_ip = Incubation-Provisioning,
+            diff_ep = EggLaying-Provisioning)
+require(bayestestR)
+describe_posterior(contrasts)#median, 95% CrI and PD for each difference
+```
+
+    ## Summary of Posterior Distribution
+    ## 
+    ## Parameter | Median |         95% CI |     pd |          ROPE | % in ROPE
+    ## ------------------------------------------------------------------------
+    ## diff_ie   |  -0.33 | [-0.59, -0.10] | 99.90% | [-0.10, 0.10] |     0.11%
+    ## diff_ip   |   0.27 | [ 0.06,  0.47] | 99.50% | [-0.10, 0.10] |     3.05%
+    ## diff_ep   |   0.61 | [ 0.37,  0.84] |   100% | [-0.10, 0.10] |        0%
+
+``` r
+contable<-describe_posterior(contrasts)#estimates for difference b/n male and female nest defense
+diff_ie<-contable%>%filter(Parameter=="diff_ie")
+diff_ip<-contable%>%filter(Parameter=="diff_ip")
+diff_ep<-contable%>%filter(Parameter=="diff_ep")
+
+# incubation vs egg-laying
+p3<-ggplot(contrasts, aes(x=diff_ie)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(contrasts$diff_ie), color="red", size=1)+
+   geom_vline(xintercept = (diff_ie$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (diff_ie$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between incubation and egg laying",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+p3
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast2-1.png)<!-- -->
+
+``` r
+# pd plot incubation vs egg-laying
+plot(pd(contrasts$diff_ie))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast2-2.png)<!-- -->
+
+``` r
+# incubation vs provisioning
+p2<-ggplot(contrasts, aes(x=diff_ip)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(contrasts$diff_ip), color="red", size=1)+
+   geom_vline(xintercept = (diff_ip$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (diff_ip$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between incubation and provisioning",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+p2
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast2-3.png)<!-- -->
+
+``` r
+# pd plot incubation vs egg-laying
+plot(pd(contrasts$diff_ip))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast2-4.png)<!-- -->
+
+``` r
+# egg laying vs provisioning
+p1<-ggplot(contrasts, aes(x=diff_ep)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(contrasts$diff_ep), color="red", size=1)+
+   geom_vline(xintercept = (diff_ep$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (diff_ep$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between incubation and provisioning",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+p1
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast2-5.png)<!-- -->
+
+``` r
+# pd plot egg laying vs provisioning
+plot(pd(contrasts$diff_ep))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast2-6.png)<!-- -->
+
+### **Contrast difference among years**
+
+``` r
+p55<-smod@fixef[,5]#gather posterior for intercept(female) and Male 
+p55<-as.data.frame(p222)#make a dataframe to manipulate easier
+colnames(p55)<-c("Year2019")#change column names
+p2224<-smod@fixef[,1]#extract intercept (estimate for egg-laying)
+p2224<-as.data.frame(p2224)
+colnames(p2224)<-"Intercept"
+
+yearcon<-as.data.frame(c(p2224, p55))
+
+p2299<-yearcon%>%
+  summarise(Y2019 = Intercept+ Year2019)#add posteriors for Intercept(2018) to each value of Male
+
+ycon<-as.data.frame(c(yearcon, p2299)) 
+
+
+difference_y<-ycon%>%
+  summarise(diff_year= Intercept - Y2019)#compute difference
+
+
+require(bayestestR)
+describe_posterior(difference_y)# pd is 87% for difference among sexes 
+```
+
+    ## Summary of Posterior Distribution
+    ## 
+    ## Parameter | Median |         95% CI |   pd |          ROPE | % in ROPE
+    ## ----------------------------------------------------------------------
+    ## diff_year |  -2.97 | [-3.25, -2.69] | 100% | [-0.10, 0.10] |        0%
+
+``` r
+contable<-describe_posterior(difference_y)#estimates for difference b/n male and female nest defense
+
+
+
+
+ggplot(difference_y, aes(x=diff_year)) + geom_density(fill="orange") +
+  geom_vline(xintercept = median(difference_y$diff_year), color="red", size=1)+
+   geom_vline(xintercept = (contable$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (contable$CI_high), color="black", size=1, linetype="longdash")+
+  labs(x= "Difference", y="Density")+
+  ggtitle(label ="Difference between 2018 and 2019",
+          subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast5-1.png)<!-- -->
+
+``` r
+plot(pd(difference_y$diff_year))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/contrast5-2.png)<!-- -->
+##### **Long-term and short-term repeatability–Univariate model with no
+interaction**
 
 ``` r
 ### Long-term repeatability
@@ -1392,14 +1625,14 @@ posterior.mode(r)
 ```
 
     ##      var1 
-    ## 0.3042671
+    ## 0.3020857
 
 ``` r
 HPDinterval(r)  ##repeatability 
 ```
 
-    ##          lower     upper
-    ## var1 0.2475596 0.3559779
+    ##          lower    upper
+    ## var1 0.2481627 0.362272
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1410,18 +1643,18 @@ posterior.mode(r1)
 ```
 
     ##      var1 
-    ## 0.3717138
+    ## 0.3660512
 
 ``` r
 HPDinterval(r1)  ##repeatability
 ```
 
-    ##          lower     upper
-    ## var1 0.3266947 0.4249424
+    ##         lower     upper
+    ## var1 0.324245 0.4238655
     ## attr(,"Probability")
     ## [1] 0.95
 
-##### **Plot– Univariate model with no interaction**
+##### **Plot–Univariate model with no interaction**
 
 ``` r
 #load packages for predictive plot
@@ -1433,26 +1666,24 @@ d18<-subset(data, data$Year=="2018")
 d19<-subset(data, data$Year=="2019")
 
 #plot
-p18<-ggplot(d18, aes(x = NestStage, y = MinDisRaw, factor=NestStage, fill=Sex, color=Sex)) + geom_boxplot() +
+p18<-ggplot(data, aes(x = NestStage, y = MinDisRaw, factor=NestStage, fill=Sex)) + geom_boxplot() +
   scale_y_continuous("Minimum approach distnace to observer (m)",limits = c(0, 100)) +
   scale_x_discrete("Nest Stage", labels=c('Egg-laying', 'Incubating', 'Provisioning'))+ 
   guides(fill="none")+
-  guides(color="none")+
-theme_classic() 
+  guides(color="none")+ theme_classic(base_size = 12) 
 
-
-p19<-ggplot(d19, aes(x = NestStage, y = MinDisRaw, factor=NestStage, fill=Sex, color=Sex)) + geom_boxplot() +
-  scale_y_continuous("",limits = c(0, 100)) +
-  scale_x_discrete("Nest Stage", labels=c('Egg-laying', 'Incubating', 'Provisioning')) +
-  theme_classic() 
-
-
-
-require(cowplot)
-plot_grid(p18,p19)
+p18
 ```
 
 ![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/plot1-1.png)<!-- -->
+
+``` r
+require(cowplot)
+#posterior of difference plots for groups in main effects (supp material)
+cowplot::plot_grid(p3, p2, p1, nrow = 2,labels = c("A.", "B.", "C."))
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/plot1-2.png)<!-- -->
 
 ### **5. Models of (dis-)assortative mating + relative fitness**
 
@@ -1481,40 +1712,40 @@ summary(mod.12)
     ##  Thinning interval  = 500
     ##  Sample size  = 1000 
     ## 
-    ##  DIC: 117.4624 
+    ##  DIC: 117.4801 
     ## 
     ##  G-structure:  ~us(trait):NestID
     ## 
     ##                                post.mean   l-95% CI u-95% CI eff.samp
-    ## traitMale:traitMale.NestID       0.56989  9.222e-02   1.1259   888.80
-    ## traitFemale:traitMale.NestID     0.04319 -1.058e-01   0.2084   898.91
-    ## traitrfit:traitMale.NestID       0.01745 -3.632e-01   0.4079  1095.32
-    ## traitMale:traitFemale.NestID     0.04319 -1.058e-01   0.2084   898.91
-    ## traitFemale:traitFemale.NestID   0.09250  4.076e-09   0.2299  1000.00
-    ## traitrfit:traitFemale.NestID     0.10169 -9.033e-02   0.2995   679.56
-    ## traitMale:traitrfit.NestID       0.01745 -3.632e-01   0.4079  1095.32
-    ## traitFemale:traitrfit.NestID     0.10169 -9.033e-02   0.2995   679.56
-    ## traitrfit:traitrfit.NestID       0.93019  4.890e-01   1.5539    38.86
+    ## traitMale:traitMale.NestID       0.57162  1.191e-01   1.1460   1212.7
+    ## traitFemale:traitMale.NestID     0.03971 -1.023e-01   0.2103   1000.0
+    ## traitrfit:traitMale.NestID       0.01771 -3.465e-01   0.3867   1000.0
+    ## traitMale:traitFemale.NestID     0.03971 -1.023e-01   0.2103   1000.0
+    ## traitFemale:traitFemale.NestID   0.09148  1.536e-06   0.2323    994.9
+    ## traitrfit:traitFemale.NestID     0.10401 -6.183e-02   0.3149   1000.0
+    ## traitMale:traitrfit.NestID       0.01771 -3.465e-01   0.3867   1000.0
+    ## traitFemale:traitrfit.NestID     0.10401 -6.183e-02   0.3149   1000.0
+    ## traitrfit:traitrfit.NestID       0.88030  4.400e-01   1.4262   1000.0
     ## 
     ##  R-structure:  ~us(trait):units
     ## 
-    ##                               post.mean  l-95% CI u-95% CI eff.samp
-    ## traitMale:traitMale.units     6.394e-01  0.393843 0.911938   1300.9
-    ## traitFemale:traitMale.units   4.003e-02 -0.090227 0.172024   1000.0
-    ## traitrfit:traitMale.units     4.840e-05 -0.005966 0.006173   1000.0
-    ## traitMale:traitFemale.units   4.003e-02 -0.090227 0.172024   1000.0
-    ## traitFemale:traitFemale.units 3.769e-01  0.238283 0.524822    819.5
-    ## traitrfit:traitFemale.units   5.433e-05 -0.004376 0.004373   1000.0
-    ## traitMale:traitrfit.units     4.840e-05 -0.005966 0.006173   1000.0
-    ## traitFemale:traitrfit.units   5.433e-05 -0.004376 0.004373   1000.0
-    ## traitrfit:traitrfit.units     1.000e-04  0.000100 0.000100      0.0
+    ##                                post.mean  l-95% CI u-95% CI eff.samp
+    ## traitMale:traitMale.units      6.275e-01  0.392554 0.905096   1000.0
+    ## traitFemale:traitMale.units    4.217e-02 -0.108811 0.182372   1000.0
+    ## traitrfit:traitMale.units     -1.655e-05 -0.006466 0.005856   1000.0
+    ## traitMale:traitFemale.units    4.217e-02 -0.108811 0.182372   1000.0
+    ## traitFemale:traitFemale.units  3.841e-01  0.244530 0.538040    773.3
+    ## traitrfit:traitFemale.units   -1.243e-05 -0.004592 0.004352   1000.0
+    ## traitMale:traitrfit.units     -1.655e-05 -0.006466 0.005856   1000.0
+    ## traitFemale:traitrfit.units   -1.243e-05 -0.004592 0.004352   1000.0
+    ## traitrfit:traitrfit.units      1.000e-04  0.000100 0.000100      0.0
     ## 
     ##  Location effects: cbind(Male, Female, rfit) ~ (trait - 1) 
     ## 
     ##             post.mean l-95% CI u-95% CI eff.samp  pMCMC    
-    ## traitMale     -2.3676  -2.7349  -1.9903     1000 <0.001 ***
-    ## traitFemale   -2.5808  -2.7774  -2.3830     1000 <0.001 ***
-    ## traitrfit      0.7908   0.4250   1.1488     1000  0.002 ** 
+    ## traitMale     -2.3719  -2.7515  -2.0259   1000.0 <0.001 ***
+    ## traitFemale   -2.5826  -2.7853  -2.3851    881.9 <0.001 ***
+    ## traitrfit      0.7785   0.4064   1.1012   1000.0 <0.001 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -1530,59 +1761,59 @@ autocorr.diag(mod.12$VCV)
 ```
 
     ##           traitMale:traitMale.NestID traitFemale:traitMale.NestID
-    ## Lag 0                     1.00000000                  1.000000000
-    ## Lag 500                   0.05837702                  0.035579167
-    ## Lag 2500                  0.05861474                 -0.034950510
-    ## Lag 5000                 -0.01120139                  0.009474145
-    ## Lag 25000                -0.00945815                  0.018201405
+    ## Lag 0                    1.000000000                 1.0000000000
+    ## Lag 500                 -0.066334903                -0.0013713223
+    ## Lag 2500                -0.027838869                -0.0005997272
+    ## Lag 5000                -0.006293716                -0.0270956906
+    ## Lag 25000                0.006395170                 0.0068477321
     ##           traitrfit:traitMale.NestID traitMale:traitFemale.NestID
-    ## Lag 0                     1.00000000                  1.000000000
-    ## Lag 500                  -0.04599095                  0.035579167
-    ## Lag 2500                  0.07277455                 -0.034950510
-    ## Lag 5000                 -0.04595774                  0.009474145
-    ## Lag 25000                -0.01556417                  0.018201405
+    ## Lag 0                     1.00000000                 1.0000000000
+    ## Lag 500                   0.01647310                -0.0013713223
+    ## Lag 2500                  0.04758344                -0.0005997272
+    ## Lag 5000                  0.03757998                -0.0270956906
+    ## Lag 25000                -0.03844041                 0.0068477321
     ##           traitFemale:traitFemale.NestID traitrfit:traitFemale.NestID
-    ## Lag 0                         1.00000000                   1.00000000
-    ## Lag 500                      -0.04046444                   0.05575488
-    ## Lag 2500                      0.06250514                   0.06646017
-    ## Lag 5000                      0.01364690                  -0.01270063
-    ## Lag 25000                     0.02304230                   0.03794838
+    ## Lag 0                         1.00000000                 1.0000000000
+    ## Lag 500                       0.00732241                -0.0202237084
+    ## Lag 2500                     -0.02039748                -0.0189710467
+    ## Lag 5000                     -0.01341689                 0.0001045529
+    ## Lag 25000                    -0.01832319                -0.0363479131
     ##           traitMale:traitrfit.NestID traitFemale:traitrfit.NestID
-    ## Lag 0                     1.00000000                   1.00000000
-    ## Lag 500                  -0.04599095                   0.05575488
-    ## Lag 2500                  0.07277455                   0.06646017
-    ## Lag 5000                 -0.04595774                  -0.01270063
-    ## Lag 25000                -0.01556417                   0.03794838
+    ## Lag 0                     1.00000000                 1.0000000000
+    ## Lag 500                   0.01647310                -0.0202237084
+    ## Lag 2500                  0.04758344                -0.0189710467
+    ## Lag 5000                  0.03757998                 0.0001045529
+    ## Lag 25000                -0.03844041                -0.0363479131
     ##           traitrfit:traitrfit.NestID traitMale:traitMale.units
-    ## Lag 0                      1.0000000                1.00000000
-    ## Lag 500                    0.1291120                0.02140106
-    ## Lag 2500                   0.1824423                0.03444122
-    ## Lag 5000                   0.1323657               -0.01230635
-    ## Lag 25000                  0.1216772                0.02746964
+    ## Lag 0                    1.000000000               1.000000000
+    ## Lag 500                 -0.037837948               0.042639376
+    ## Lag 2500                 0.023473765              -0.038155838
+    ## Lag 5000                 0.007721926              -0.003122516
+    ## Lag 25000                0.026044020              -0.011941573
     ##           traitFemale:traitMale.units traitrfit:traitMale.units
-    ## Lag 0                      1.00000000                1.00000000
-    ## Lag 500                    0.00748913                0.04129231
-    ## Lag 2500                  -0.05409303               -0.01235749
-    ## Lag 5000                  -0.01182812               -0.04472182
-    ## Lag 25000                  0.01411989               -0.01617408
+    ## Lag 0                    1.0000000000                1.00000000
+    ## Lag 500                 -0.0188766886                0.02573786
+    ## Lag 2500                -0.0004261213               -0.04315561
+    ## Lag 5000                -0.0018949551                0.03206013
+    ## Lag 25000               -0.0451908612                0.05783478
     ##           traitMale:traitFemale.units traitFemale:traitFemale.units
-    ## Lag 0                      1.00000000                   1.000000000
-    ## Lag 500                    0.00748913                  -0.031850844
-    ## Lag 2500                  -0.05409303                   0.059474481
-    ## Lag 5000                  -0.01182812                   0.009554876
-    ## Lag 25000                  0.01411989                  -0.012404402
+    ## Lag 0                    1.0000000000                   1.000000000
+    ## Lag 500                 -0.0188766886                   0.020955035
+    ## Lag 2500                -0.0004261213                  -0.031942343
+    ## Lag 5000                -0.0018949551                   0.005684043
+    ## Lag 25000               -0.0451908612                   0.021184946
     ##           traitrfit:traitFemale.units traitMale:traitrfit.units
-    ## Lag 0                     1.000000000                1.00000000
-    ## Lag 500                   0.004283846                0.04129231
-    ## Lag 2500                  0.014297746               -0.01235749
-    ## Lag 5000                 -0.039163024               -0.04472182
-    ## Lag 25000                 0.035717481               -0.01617408
+    ## Lag 0                      1.00000000                1.00000000
+    ## Lag 500                   -0.03005326                0.02573786
+    ## Lag 2500                   0.04747114               -0.04315561
+    ## Lag 5000                  -0.01660903                0.03206013
+    ## Lag 25000                  0.05550289                0.05783478
     ##           traitFemale:traitrfit.units traitrfit:traitrfit.units
-    ## Lag 0                     1.000000000                       NaN
-    ## Lag 500                   0.004283846                       NaN
-    ## Lag 2500                  0.014297746                       NaN
-    ## Lag 5000                 -0.039163024                       NaN
-    ## Lag 25000                 0.035717481                       NaN
+    ## Lag 0                      1.00000000                       NaN
+    ## Lag 500                   -0.03005326                       NaN
+    ## Lag 2500                   0.04747114                       NaN
+    ## Lag 5000                  -0.01660903                       NaN
+    ## Lag 25000                  0.05550289                       NaN
 
 ``` r
 autocorr(mod.12$Sol)
@@ -1590,30 +1821,30 @@ autocorr(mod.12$Sol)
 
     ## , , traitMale
     ## 
-    ##             traitMale  traitFemale    traitrfit
-    ## Lag 0      1.00000000  0.145675970  0.006921785
-    ## Lag 500    0.01700626 -0.003344405  0.006679925
-    ## Lag 2500   0.01208667 -0.035245513  0.023680582
-    ## Lag 5000  -0.08302443  0.001380677 -0.008536157
-    ## Lag 25000 -0.04059923  0.021205067 -0.054350825
+    ##              traitMale  traitFemale    traitrfit
+    ## Lag 0      1.000000000  0.157920377  0.001854675
+    ## Lag 500   -0.013456481 -0.001968167 -0.031309056
+    ## Lag 2500   0.031462035  0.011485637  0.008483902
+    ## Lag 5000   0.008235701  0.054422924  0.002590875
+    ## Lag 25000  0.031345415 -0.014902213 -0.061689702
     ## 
     ## , , traitFemale
     ## 
-    ##              traitMale   traitFemale    traitrfit
-    ## Lag 0      0.145675970  1.0000000000  0.181994865
-    ## Lag 500   -0.017185195 -0.0200351057 -0.013163385
-    ## Lag 2500  -0.057449153 -0.0049691452 -0.056734823
-    ## Lag 5000   0.007570464 -0.0079034316 -0.007419976
-    ## Lag 25000  0.012078799 -0.0006065556  0.011188318
+    ##              traitMale traitFemale   traitrfit
+    ## Lag 0      0.157920377  1.00000000  0.24171869
+    ## Lag 500   -0.056674460  0.06224353 -0.01621595
+    ## Lag 2500   0.071302104 -0.01450186 -0.04409164
+    ## Lag 5000   0.061498584  0.01533070 -0.04147394
+    ## Lag 25000 -0.003447435  0.02259326 -0.02774252
     ## 
     ## , , traitrfit
     ## 
-    ##               traitMale traitFemale    traitrfit
-    ## Lag 0      6.921785e-03  0.18199486  1.000000000
-    ## Lag 500   -3.060953e-02 -0.01270493  0.040147370
-    ## Lag 2500  -1.727876e-02 -0.01221949 -0.008041050
-    ## Lag 5000   1.513165e-02  0.06510525 -0.009549130
-    ## Lag 25000 -8.060348e-05  0.02789665 -0.009360716
+    ##             traitMale traitFemale    traitrfit
+    ## Lag 0     0.001854675  0.24171869  1.000000000
+    ## Lag 500   0.013993901 -0.03434909 -0.025093132
+    ## Lag 2500  0.066245218  0.02487113 -0.044446029
+    ## Lag 5000  0.015984582  0.02970527  0.006634395
+    ## Lag 25000 0.024133842  0.02540699 -0.012843068
 
 ##### **Among and within-pair correlations and selection gradients– 2018 3 trait model**
 
@@ -1624,23 +1855,23 @@ posterior.mode(posteriors_3)
 ```
 
     ##     traitMale:traitMale.NestID   traitFemale:traitMale.NestID 
-    ##                   5.703277e-01                  -3.231123e-04 
+    ##                   3.953745e-01                  -2.659587e-03 
     ##     traitrfit:traitMale.NestID   traitMale:traitFemale.NestID 
-    ##                   3.175626e-02                  -3.231123e-04 
+    ##                  -5.868262e-02                  -2.659587e-03 
     ## traitFemale:traitFemale.NestID   traitrfit:traitFemale.NestID 
-    ##                   1.463532e-03                   7.074123e-02 
+    ##                   1.577899e-03                   8.330009e-02 
     ##     traitMale:traitrfit.NestID   traitFemale:traitrfit.NestID 
-    ##                   3.175626e-02                   7.074123e-02 
+    ##                  -5.868262e-02                   8.330009e-02 
     ##     traitrfit:traitrfit.NestID      traitMale:traitMale.units 
-    ##                   7.438221e-01                   6.758568e-01 
+    ##                   7.485818e-01                   6.398303e-01 
     ##    traitFemale:traitMale.units      traitrfit:traitMale.units 
-    ##                   9.617974e-03                  -5.857169e-04 
+    ##                   3.818817e-02                  -1.128652e-03 
     ##    traitMale:traitFemale.units  traitFemale:traitFemale.units 
-    ##                   9.617974e-03                   3.237293e-01 
+    ##                   3.818817e-02                   3.803748e-01 
     ##    traitrfit:traitFemale.units      traitMale:traitrfit.units 
-    ##                  -1.689784e-03                  -5.857169e-04 
+    ##                   1.524494e-03                  -1.128652e-03 
     ##    traitFemale:traitrfit.units      traitrfit:traitrfit.units 
-    ##                  -1.689784e-03                   9.998673e-05
+    ##                   1.524494e-03                   9.998673e-05
 
 ``` r
 # among-pair correlations
@@ -1652,14 +1883,14 @@ posterior.mode(pair.correlation_3)
 ```
 
     ##      var1 
-    ## 0.1919099
+    ## 0.1808913
 
 ``` r
 HPDinterval(pair.correlation_3)
 ```
 
     ##           lower     upper
-    ## var1 -0.4272424 0.8077327
+    ## var1 -0.5007218 0.7760622
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1673,14 +1904,14 @@ posterior.mode(residual.correlation_3)
 ```
 
     ##       var1 
-    ## 0.06874486
+    ## 0.09247406
 
 ``` r
 HPDinterval(residual.correlation_3)
 ```
 
-    ##           lower     upper
-    ## var1 -0.1817171 0.3402305
+    ##         lower     upper
+    ## var1 -0.20116 0.3356918
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1692,15 +1923,15 @@ Male_sel_18<- posteriors_3[,"traitrfit:traitMale.NestID"]/
 posterior.mode(Male_sel_18)
 ```
 
-    ##      var1 
-    ## 0.0549291
+    ##       var1 
+    ## -0.1030154
 
 ``` r
 HPDinterval(Male_sel_18)
 ```
 
     ##           lower     upper
-    ## var1 -0.4635925 0.4651088
+    ## var1 -0.4201811 0.5017051
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1712,15 +1943,15 @@ Female_sel_18<- posteriors_3[,"traitrfit:traitFemale.NestID"]/
 posterior.mode(Female_sel_18)
 ```
 
-    ##      var1 
-    ## 0.4064601
+    ##     var1 
+    ## 0.402253
 
 ``` r
 HPDinterval(Female_sel_18)
 ```
 
-    ##          lower     upper
-    ## var1 -0.242507 0.9198217
+    ##           lower     upper
+    ## var1 -0.1973032 0.8557259
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1750,40 +1981,40 @@ summary(mod.13)
     ##  Thinning interval  = 500
     ##  Sample size  = 1000 
     ## 
-    ##  DIC: 117.1267 
+    ##  DIC: 117.0648 
     ## 
     ##  G-structure:  ~us(trait):NestID
     ## 
     ##                                post.mean l-95% CI u-95% CI eff.samp
-    ## traitMale:traitMale.NestID        0.7658  0.18525  1.49729   901.80
-    ## traitFemale:traitMale.NestID     -0.2556 -0.63833  0.07629  1000.00
-    ## traitrfit:traitMale.NestID        0.4472 -0.33907  1.22122   738.60
-    ## traitMale:traitFemale.NestID     -0.2556 -0.63833  0.07629  1000.00
-    ## traitFemale:traitFemale.NestID    0.4652  0.03503  0.98177  1000.00
-    ## traitrfit:traitFemale.NestID     -0.2182 -0.83665  0.44267  1000.00
-    ## traitMale:traitrfit.NestID        0.4472 -0.33907  1.22122   738.60
-    ## traitFemale:traitrfit.NestID     -0.2182 -0.83665  0.44267  1000.00
-    ## traitrfit:traitrfit.NestID        3.9934  1.80763  6.45554    61.51
+    ## traitMale:traitMale.NestID        0.7596  0.10484  1.46387    836.3
+    ## traitFemale:traitMale.NestID     -0.2612 -0.69874  0.09385   1000.0
+    ## traitrfit:traitMale.NestID        0.4715 -0.33574  1.33388    920.9
+    ## traitMale:traitFemale.NestID     -0.2612 -0.69874  0.09385   1000.0
+    ## traitFemale:traitFemale.NestID    0.4771  0.03426  1.06770   1000.0
+    ## traitrfit:traitFemale.NestID     -0.2419 -0.92711  0.40718    834.4
+    ## traitMale:traitrfit.NestID        0.4715 -0.33574  1.33388    920.9
+    ## traitFemale:traitrfit.NestID     -0.2419 -0.92711  0.40718    834.4
+    ## traitrfit:traitrfit.NestID        3.5417  1.77547  5.61870    895.4
     ## 
     ##  R-structure:  ~us(trait):units
     ## 
-    ##                                post.mean  l-95% CI u-95% CI eff.samp
-    ## traitMale:traitMale.units      9.034e-01  0.557263  1.35378   1000.0
-    ## traitFemale:traitMale.units    2.789e-01  0.033092  0.59505    892.3
-    ## traitrfit:traitMale.units      6.043e-05 -0.007477  0.00765    913.0
-    ## traitMale:traitFemale.units    2.789e-01  0.033092  0.59505    892.3
-    ## traitFemale:traitFemale.units  7.682e-01  0.459768  1.13016   1000.0
-    ## traitrfit:traitFemale.units   -2.240e-06 -0.007183  0.00693   1000.0
-    ## traitMale:traitrfit.units      6.043e-05 -0.007477  0.00765    913.0
-    ## traitFemale:traitrfit.units   -2.240e-06 -0.007183  0.00693   1000.0
-    ## traitrfit:traitrfit.units      1.000e-04  0.000100  0.00010      0.0
+    ##                               post.mean  l-95% CI u-95% CI eff.samp
+    ## traitMale:traitMale.units     0.9083559  0.544938 1.307123    910.4
+    ## traitFemale:traitMale.units   0.2817000  0.025502 0.555127   1098.8
+    ## traitrfit:traitMale.units     0.0001012 -0.008133 0.007839   1000.0
+    ## traitMale:traitFemale.units   0.2817000  0.025502 0.555127   1098.8
+    ## traitFemale:traitFemale.units 0.7651164  0.472031 1.149956   1084.0
+    ## traitrfit:traitFemale.units   0.0001176 -0.007099 0.007123   1000.0
+    ## traitMale:traitrfit.units     0.0001012 -0.008133 0.007839   1000.0
+    ## traitFemale:traitrfit.units   0.0001176 -0.007099 0.007123   1000.0
+    ## traitrfit:traitrfit.units     0.0001000  0.000100 0.000100      0.0
     ## 
     ##  Location effects: cbind(Male, Female, rfit) ~ (trait - 1) 
     ## 
-    ##             post.mean l-95% CI u-95% CI eff.samp  pMCMC    
-    ## traitMale    -2.39708 -2.85897 -2.01202     1000 <0.001 ***
-    ## traitFemale  -2.73624 -3.10444 -2.35602     1000 <0.001 ***
-    ## traitrfit     0.66337 -0.09835  1.41498     1000  0.084 .  
+    ##             post.mean  l-95% CI  u-95% CI eff.samp  pMCMC    
+    ## traitMale   -2.395433 -2.844866 -1.981556     1000 <0.001 ***
+    ## traitFemale -2.727529 -3.080421 -2.341825     1000 <0.001 ***
+    ## traitrfit    0.670827  0.001814  1.440151     1000  0.054 .  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -1799,59 +2030,59 @@ autocorr.diag(mod.13$VCV)
 ```
 
     ##           traitMale:traitMale.NestID traitFemale:traitMale.NestID
-    ## Lag 0                    1.000000000                   1.00000000
-    ## Lag 500                  0.051134508                   0.00724236
-    ## Lag 2500                 0.003822755                   0.02723726
-    ## Lag 5000                -0.021716343                  -0.05128360
-    ## Lag 25000               -0.004938467                  -0.01549548
+    ## Lag 0                   1.0000000000                   1.00000000
+    ## Lag 500                 0.0054254181                  -0.03336815
+    ## Lag 2500                0.0539898644                   0.03505506
+    ## Lag 5000                0.0003671051                  -0.01946646
+    ## Lag 25000              -0.0139164209                   0.02743777
     ##           traitrfit:traitMale.NestID traitMale:traitFemale.NestID
     ## Lag 0                    1.000000000                   1.00000000
-    ## Lag 500                  0.001142914                   0.00724236
-    ## Lag 2500                -0.010754623                   0.02723726
-    ## Lag 5000                 0.038489976                  -0.05128360
-    ## Lag 25000               -0.013062475                  -0.01549548
+    ## Lag 500                 -0.007846613                  -0.03336815
+    ## Lag 2500                -0.002162858                   0.03505506
+    ## Lag 5000                 0.028070233                  -0.01946646
+    ## Lag 25000               -0.024245423                   0.02743777
     ##           traitFemale:traitFemale.NestID traitrfit:traitFemale.NestID
-    ## Lag 0                       1.0000000000                  1.000000000
-    ## Lag 500                     0.0326296278                  0.018105314
-    ## Lag 2500                    0.0038310226                  0.033200576
-    ## Lag 5000                    0.0379877788                  0.005037207
-    ## Lag 25000                  -0.0006226465                 -0.013577273
+    ## Lag 0                        1.000000000                  1.000000000
+    ## Lag 500                     -0.014114858                  0.089801522
+    ## Lag 2500                    -0.007049805                 -0.005891096
+    ## Lag 5000                    -0.018245709                  0.001758735
+    ## Lag 25000                    0.013710888                  0.006465499
     ##           traitMale:traitrfit.NestID traitFemale:traitrfit.NestID
     ## Lag 0                    1.000000000                  1.000000000
-    ## Lag 500                  0.001142914                  0.018105314
-    ## Lag 2500                -0.010754623                  0.033200576
-    ## Lag 5000                 0.038489976                  0.005037207
-    ## Lag 25000               -0.013062475                 -0.013577273
+    ## Lag 500                 -0.007846613                  0.089801522
+    ## Lag 2500                -0.002162858                 -0.005891096
+    ## Lag 5000                 0.028070233                  0.001758735
+    ## Lag 25000               -0.024245423                  0.006465499
     ##           traitrfit:traitrfit.NestID traitMale:traitMale.units
-    ## Lag 0                     1.00000000                1.00000000
-    ## Lag 500                   0.09075916                0.04000296
-    ## Lag 2500                  0.14217745                0.01076144
-    ## Lag 5000                  0.16969184                0.02697842
-    ## Lag 25000                 0.07679551                0.04667953
+    ## Lag 0                     1.00000000               1.000000000
+    ## Lag 500                   0.05468714               0.046420728
+    ## Lag 2500                  0.02416710               0.006346654
+    ## Lag 5000                  0.03203154               0.024429421
+    ## Lag 25000                 0.04905211              -0.060536152
     ##           traitFemale:traitMale.units traitrfit:traitMale.units
     ## Lag 0                      1.00000000               1.000000000
-    ## Lag 500                    0.05642593               0.044975569
-    ## Lag 2500                   0.04940945              -0.029851064
-    ## Lag 5000                   0.02049446              -0.009417827
-    ## Lag 25000                  0.03918477              -0.024545360
+    ## Lag 500                   -0.04758911               0.044605515
+    ## Lag 2500                  -0.01203878               0.001150107
+    ## Lag 5000                  -0.04951283              -0.017493690
+    ## Lag 25000                  0.02825216               0.011283523
     ##           traitMale:traitFemale.units traitFemale:traitFemale.units
     ## Lag 0                      1.00000000                    1.00000000
-    ## Lag 500                    0.05642593                   -0.01073882
-    ## Lag 2500                   0.04940945                   -0.05051152
-    ## Lag 5000                   0.02049446                    0.01167116
-    ## Lag 25000                  0.03918477                   -0.01050034
+    ## Lag 500                   -0.04758911                    0.01648321
+    ## Lag 2500                  -0.01203878                   -0.03397622
+    ## Lag 5000                  -0.04951283                   -0.06329939
+    ## Lag 25000                  0.02825216                   -0.09957813
     ##           traitrfit:traitFemale.units traitMale:traitrfit.units
     ## Lag 0                     1.000000000               1.000000000
-    ## Lag 500                   0.024517386               0.044975569
-    ## Lag 2500                 -0.003511141              -0.029851064
-    ## Lag 5000                  0.008584050              -0.009417827
-    ## Lag 25000                -0.016133825              -0.024545360
+    ## Lag 500                   0.043073307               0.044605515
+    ## Lag 2500                  0.028909960               0.001150107
+    ## Lag 5000                 -0.015390507              -0.017493690
+    ## Lag 25000                 0.002302088               0.011283523
     ##           traitFemale:traitrfit.units traitrfit:traitrfit.units
     ## Lag 0                     1.000000000                       NaN
-    ## Lag 500                   0.024517386                       NaN
-    ## Lag 2500                 -0.003511141                       NaN
-    ## Lag 5000                  0.008584050                       NaN
-    ## Lag 25000                -0.016133825                       NaN
+    ## Lag 500                   0.043073307                       NaN
+    ## Lag 2500                  0.028909960                       NaN
+    ## Lag 5000                 -0.015390507                       NaN
+    ## Lag 25000                 0.002302088                       NaN
 
 ``` r
 autocorr(mod.13$Sol)
@@ -1859,30 +2090,30 @@ autocorr(mod.13$Sol)
 
     ## , , traitMale
     ## 
-    ##            traitMale   traitFemale    traitrfit
-    ## Lag 0     1.00000000 -0.1497239915  0.211140350
-    ## Lag 500   0.01368360 -0.0521186952  0.009866805
-    ## Lag 2500  0.02385626  0.0002271269  0.035182752
-    ## Lag 5000  0.06789204 -0.0850689204  0.009009098
-    ## Lag 25000 0.01593887 -0.0442318216 -0.047356975
+    ##              traitMale   traitFemale   traitrfit
+    ## Lag 0      1.000000000 -0.1379389281  0.24827552
+    ## Lag 500    0.014808491  0.0197547093 -0.04836474
+    ## Lag 2500   0.006960153 -0.0008871812  0.03180231
+    ## Lag 5000  -0.034406482  0.0497689513 -0.06616068
+    ## Lag 25000  0.032131065  0.0280646856 -0.03897713
     ## 
     ## , , traitFemale
     ## 
-    ##               traitMale  traitFemale   traitrfit
-    ## Lag 0     -0.1497239915  1.000000000 -0.17039884
-    ## Lag 500    0.0226273434  0.044293589  0.03164957
-    ## Lag 2500   0.0007853469  0.001868251 -0.01143669
-    ## Lag 5000  -0.0128378193  0.033418210  0.02027201
-    ## Lag 25000 -0.0424998876 -0.031758848  0.03213527
+    ##              traitMale traitFemale   traitrfit
+    ## Lag 0     -0.137938928  1.00000000 -0.15107287
+    ## Lag 500   -0.007986626  0.01036491  0.05076164
+    ## Lag 2500  -0.001437207 -0.03490240  0.01096927
+    ## Lag 5000   0.016568926 -0.05975334 -0.03302275
+    ## Lag 25000  0.009034207 -0.05925851  0.02557878
     ## 
     ## , , traitrfit
     ## 
     ##              traitMale  traitFemale   traitrfit
-    ## Lag 0      0.211140350 -0.170398843  1.00000000
-    ## Lag 500   -0.014522174  0.005917700  0.01028385
-    ## Lag 2500  -0.091188327  0.005764886  0.02205886
-    ## Lag 5000  -0.008699388  0.017162280 -0.03456548
-    ## Lag 25000 -0.032493011  0.021723591 -0.03722415
+    ## Lag 0      0.248275515 -0.151072866  1.00000000
+    ## Lag 500   -0.003907595 -0.024356296 -0.04103931
+    ## Lag 2500   0.010187991  0.007879165  0.00194854
+    ## Lag 5000  -0.023974920  0.045791351 -0.06257396
+    ## Lag 25000  0.021101117 -0.005778781 -0.04359095
 
 ``` r
 # posteriors
@@ -1891,23 +2122,23 @@ posterior.mode(posteriors1)
 ```
 
     ##     traitMale:traitMale.NestID   traitFemale:traitMale.NestID 
-    ##                   6.634293e-01                  -2.114406e-01 
+    ##                   4.933177e-01                  -2.427007e-01 
     ##     traitrfit:traitMale.NestID   traitMale:traitFemale.NestID 
-    ##                   2.845394e-01                  -2.114406e-01 
+    ##                   2.350852e-01                  -2.427007e-01 
     ## traitFemale:traitFemale.NestID   traitrfit:traitFemale.NestID 
-    ##                   4.788666e-01                  -1.602029e-01 
+    ##                   2.735821e-01                  -2.246197e-01 
     ##     traitMale:traitrfit.NestID   traitFemale:traitrfit.NestID 
-    ##                   2.845394e-01                  -1.602029e-01 
+    ##                   2.350852e-01                  -2.246197e-01 
     ##     traitrfit:traitrfit.NestID      traitMale:traitMale.units 
-    ##                   3.725823e+00                   8.522314e-01 
+    ##                   3.191603e+00                   8.329934e-01 
     ##    traitFemale:traitMale.units      traitrfit:traitMale.units 
-    ##                   2.743972e-01                   4.470674e-03 
+    ##                   3.225619e-01                   1.355339e-03 
     ##    traitMale:traitFemale.units  traitFemale:traitFemale.units 
-    ##                   2.743972e-01                   6.572207e-01 
+    ##                   3.225619e-01                   7.159385e-01 
     ##    traitrfit:traitFemale.units      traitMale:traitrfit.units 
-    ##                  -4.313383e-03                   4.470674e-03 
+    ##                   1.024155e-03                   1.355339e-03 
     ##    traitFemale:traitrfit.units      traitrfit:traitrfit.units 
-    ##                  -4.313383e-03                   9.998673e-05
+    ##                   1.024155e-03                   9.998673e-05
 
 ##### **Among and within-pair correlations and selection gradients– 2019 3 trait model**
 
@@ -1921,14 +2152,14 @@ posterior.mode(pair.correlation_4)
 ```
 
     ##       var1 
-    ## -0.7159641
+    ## -0.6498721
 
 ``` r
 HPDinterval(pair.correlation_4)
 ```
 
     ##           lower      upper
-    ## var1 -0.9449235 0.04286276
+    ## var1 -0.9406419 0.06043462
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1942,14 +2173,14 @@ posterior.mode(residual.correlation4)
 ```
 
     ##      var1 
-    ## 0.3863689
+    ## 0.3386165
 
 ``` r
 HPDinterval(residual.correlation4)
 ```
 
     ##           lower     upper
-    ## var1 0.03856684 0.6032489
+    ## var1 0.05722656 0.5809864
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1962,14 +2193,14 @@ posterior.mode(Male_sel_19)
 ```
 
     ##      var1 
-    ## 0.2232151
+    ## 0.3943701
 
 ``` r
 HPDinterval(Male_sel_19)
 ```
 
     ##           lower     upper
-    ## var1 -0.1659413 0.6137945
+    ## var1 -0.1653351 0.6654792
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -1982,14 +2213,14 @@ posterior.mode(Female_sel_19)
 ```
 
     ##       var1 
-    ## -0.1984755
+    ## -0.2795337
 
 ``` r
 HPDinterval(Female_sel_19)
 ```
 
-    ##           lower    upper
-    ## var1 -0.5753892 0.234867
+    ##           lower     upper
+    ## var1 -0.6441542 0.2637651
     ## attr(,"Probability")
     ## [1] 0.95
 
@@ -2001,35 +2232,35 @@ y2018a<-ifelse(pair.correlation_3<0.04291904,1,0)
 sum(y2018a)
 ```
 
-    ## [1] 324
+    ## [1] 330
 
 ``` r
 y2018b<-ifelse(pair.correlation_3>0.04291904,1,0)
 sum(y2018b)
 ```
 
-    ## [1] 676
+    ## [1] 670
 
 ``` r
 y2019a<-ifelse(pair.correlation_4>(-0.334157 ),1,0)
 sum(y2019a)
 ```
 
-    ## [1] 279
+    ## [1] 280
 
 ``` r
 y2019b<-ifelse(pair.correlation_4<(-0.334157 ),1,0)
 sum(y2019b)
 ```
 
-    ## [1] 721
+    ## [1] 720
 
 ``` r
 p<-(sum(y2018a)/1000)*(sum(y2019a)/1000)
 p
 ```
 
-    ## [1] 0.090396
+    ## [1] 0.0924
 
 ``` r
 #within
@@ -2037,35 +2268,35 @@ y2018w<-ifelse(residual.correlation_3>0.04291904,1,0)
 sum(y2018w)
 ```
 
-    ## [1] 590
+    ## [1] 633
 
 ``` r
 y2018x<-ifelse(residual.correlation_3<0.04291904,1,0)
 sum(y2018x)
 ```
 
-    ## [1] 410
+    ## [1] 367
 
 ``` r
 y2019w<-ifelse(residual.correlation4<0.3588893,1,0)
 sum(y2019w)
 ```
 
-    ## [1] 516
+    ## [1] 549
 
 ``` r
 y2019x<-ifelse(residual.correlation4>0.3588893,1,0)
 sum(y2019x)
 ```
 
-    ## [1] 484
+    ## [1] 451
 
 ``` r
 p<-sum(y2018w)/1000*sum(y2019w)/1000
 p
 ```
 
-    ## [1] 0.30444
+    ## [1] 0.347517
 
 ``` r
 ##compare sexes within years
@@ -2077,32 +2308,32 @@ f2018b<-ifelse(Female_sel_18>(-0.4853156),0,1)
 sum(m2018)
 ```
 
-    ## [1] 611
+    ## [1] 609
 
 ``` r
 sum(m2018b)
 ```
 
-    ## [1] 389
+    ## [1] 391
 
 ``` r
 sum(f2018)
 ```
 
-    ## [1] 985
+    ## [1] 990
 
 ``` r
 sum(f2018b)
 ```
 
-    ## [1] 15
+    ## [1] 10
 
 ``` r
 p<-sum(m2018)/1000*sum(f2018)/1000
 p
 ```
 
-    ## [1] 0.601835
+    ## [1] 0.60291
 
 ``` r
 m2019<-ifelse(Male_sel_19>-0.2069016,1,0)
@@ -2113,32 +2344,32 @@ f2019b<-ifelse(Female_sel_19<0.08781835,0,1)
 sum(m2019)
 ```
 
-    ## [1] 988
+    ## [1] 986
 
 ``` r
 sum(m2019b)
 ```
 
-    ## [1] 12
+    ## [1] 14
 
 ``` r
 sum(f2019)
 ```
 
-    ## [1] 875
+    ## [1] 883
 
 ``` r
 sum(f2019b)
 ```
 
-    ## [1] 125
+    ## [1] 117
 
 ``` r
 p<-sum(m2019)/1000*sum(f2019)/1000
 p
 ```
 
-    ## [1] 0.8645
+    ## [1] 0.870638
 
 ``` r
 ##compare within sex across years
@@ -2151,32 +2382,32 @@ f2019b<-ifelse(Female_sel_19<0.09374586,0,1)
 sum(f2018)
 ```
 
-    ## [1] 944
+    ## [1] 962
 
 ``` r
 sum(f2018b)
 ```
 
-    ## [1] 56
+    ## [1] 38
 
 ``` r
 sum(f2019)
 ```
 
-    ## [1] 882
+    ## [1] 888
 
 ``` r
 sum(f2019b)
 ```
 
-    ## [1] 118
+    ## [1] 112
 
 ``` r
 p<-sum(f2018)/1000*sum(f2019)/1000
 p
 ```
 
-    ## [1] 0.832608
+    ## [1] 0.854256
 
 ``` r
 #males
@@ -2188,13 +2419,13 @@ m2019b<-ifelse(Male_sel_19>(-0.4853156),0,1)
 sum(m2018)
 ```
 
-    ## [1] 606
+    ## [1] 601
 
 ``` r
 sum(m2018b)
 ```
 
-    ## [1] 394
+    ## [1] 399
 
 ``` r
 sum(m2019)
@@ -2213,31 +2444,405 @@ p<-sum(m2018)/1000*sum(m2019)/1000
 p
 ```
 
-    ## [1] 0.606
+    ## [1] 0.601
 
-##### **Correlations plots– 3 trait model 2018 and 2019**
+##### **2018/2019 3 trait model**
 
 ``` r
+#pooled years----
+
+require(readr)
+require(tidyr)
+require(MCMCglmm)
+#data
+data2018<-read.csv("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense/data/data_2018.csv")
+data2019<-read.csv("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense/data/data_2019.csv")
+
+
+
+data2018$Male<-log(data2018$male_raw+1)*-1  #log transform 
+data2018$Female<-log(data2018$female_raw+1)*-1 #log transform
+data2018<-data2018%>%mutate(Site=SiteID)
+data2018<-data2018%>% 
+  unite(SiteID_Series,c("SiteID", "Year"))
+data2018<-data2018%>%mutate(Year="2018")
+
+
+data2019$Male<-log(data2019$male_raw+1)*-1 #log transform
+data2019$Female<-log(data2019$female_raw+1)*-1 #log transform
+data2019<-data2019%>%mutate(Site=SiteID)
+data2019<-data2019%>% 
+  unite(SiteID_Series,c("SiteID", "Year"))
+data2019<-data2019%>%mutate(Year="2019")
+
+
+data_2<-full_join(data2018, data2019) #join datasets
+
+#prior for three traits- from Houslay tutorial
+prior_E_B_fit_1px = list(R = list(V = diag(c(1,1,0.0001),3,3), nu = 1.002, fix = 3),
+                         G = list(G1 = list(V = diag(3), nu = 3,
+                                            alpha.mu = rep(0,3),
+                                            alpha.V = diag(25^2,3,3))))
+#set residual variance for fitness near 0
+prior_E_B_fit_1px$R$V[3,3]<-0.0001
+
+#2018/2019 3 trait model ----
+mod.122 <- MCMCglmm(cbind(Male, Female, rfit) ~ (trait-1),  
+                   random = ~us(trait):SiteID_Series ,
+                   rcov = ~us(trait):units, 
+                   family = c("gaussian", "gaussian", "gaussian"),
+                   data=data_2, 
+                   prior = prior_E_B_fit_1px, 
+                   verbose = FALSE,
+                   nitt=590000,thin=500,burnin=90000
+)
+
+plot(mod.122)
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/pooled-1.png)<!-- -->![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/pooled-2.png)<!-- -->![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/pooled-3.png)<!-- -->![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/pooled-4.png)<!-- -->![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/pooled-5.png)<!-- -->![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/pooled-6.png)<!-- -->
+
+``` r
+summary(mod.122)
+```
+
+    ## 
+    ##  Iterations = 90001:589501
+    ##  Thinning interval  = 500
+    ##  Sample size  = 1000 
+    ## 
+    ##  DIC: 237.7626 
+    ## 
+    ##  G-structure:  ~us(trait):SiteID_Series
+    ## 
+    ##                                       post.mean l-95% CI u-95% CI eff.samp
+    ## traitMale:traitMale.SiteID_Series       0.60578   0.2640  1.02216   1000.0
+    ## traitFemale:traitMale.SiteID_Series    -0.11408  -0.3116  0.06682   1000.0
+    ## traitrfit:traitMale.SiteID_Series       0.25908  -0.1120  0.64603   1000.0
+    ## traitMale:traitFemale.SiteID_Series    -0.11408  -0.3116  0.06682   1000.0
+    ## traitFemale:traitFemale.SiteID_Series   0.25985   0.0460  0.48775   1000.0
+    ## traitrfit:traitFemale.SiteID_Series    -0.05956  -0.3280  0.21239    754.2
+    ## traitMale:traitrfit.SiteID_Series       0.25908  -0.1120  0.64603   1000.0
+    ## traitFemale:traitrfit.SiteID_Series    -0.05956  -0.3280  0.21239    754.2
+    ## traitrfit:traitrfit.SiteID_Series       2.04632   1.3516  2.90113   1000.0
+    ## 
+    ##  R-structure:  ~us(trait):units
+    ## 
+    ##                               post.mean  l-95% CI u-95% CI eff.samp
+    ## traitMale:traitMale.units     0.7157158  0.510832 0.925850   1000.0
+    ## traitFemale:traitMale.units   0.1486249  0.003523 0.281196   1000.0
+    ## traitrfit:traitMale.units     0.0001794 -0.006713 0.006444    451.1
+    ## traitMale:traitFemale.units   0.1486249  0.003523 0.281196   1000.0
+    ## traitFemale:traitFemale.units 0.5309666  0.365036 0.701267   1000.0
+    ## traitrfit:traitFemale.units   0.0000488 -0.005548 0.005597    764.5
+    ## traitMale:traitrfit.units     0.0001794 -0.006713 0.006444    451.1
+    ## traitFemale:traitrfit.units   0.0000488 -0.005548 0.005597    764.5
+    ## traitrfit:traitrfit.units     0.0001000  0.000100 0.000100      0.0
+    ## 
+    ##  Location effects: cbind(Male, Female, rfit) ~ (trait - 1) 
+    ## 
+    ##             post.mean l-95% CI u-95% CI eff.samp  pMCMC    
+    ## traitMale     -2.3772  -2.6349  -2.1075   1000.0 <0.001 ***
+    ## traitFemale   -2.6541  -2.8548  -2.4454   1000.0 <0.001 ***
+    ## traitrfit      0.7240   0.3546   1.1069    900.7 <0.001 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+#auto-correlation
+autocorr.diag(mod.122$VCV)
+```
+
+    ##           traitMale:traitMale.SiteID_Series traitFemale:traitMale.SiteID_Series
+    ## Lag 0                            1.00000000                         1.000000000
+    ## Lag 500                          0.03872168                         0.010848200
+    ## Lag 2500                        -0.01403325                         0.041841448
+    ## Lag 5000                         0.02482725                         0.049331814
+    ## Lag 25000                        0.01950162                        -0.007053758
+    ##           traitrfit:traitMale.SiteID_Series traitMale:traitFemale.SiteID_Series
+    ## Lag 0                           1.000000000                         1.000000000
+    ## Lag 500                         0.006694918                         0.010848200
+    ## Lag 2500                       -0.017915366                         0.041841448
+    ## Lag 5000                        0.033721856                         0.049331814
+    ## Lag 25000                       0.027154822                        -0.007053758
+    ##           traitFemale:traitFemale.SiteID_Series
+    ## Lag 0                               1.000000000
+    ## Lag 500                             0.030192349
+    ## Lag 2500                           -0.022367323
+    ## Lag 5000                           -0.006002433
+    ## Lag 25000                          -0.012372032
+    ##           traitrfit:traitFemale.SiteID_Series traitMale:traitrfit.SiteID_Series
+    ## Lag 0                              1.00000000                       1.000000000
+    ## Lag 500                           -0.01881348                       0.006694918
+    ## Lag 2500                           0.07499007                      -0.017915366
+    ## Lag 5000                          -0.01547835                       0.033721856
+    ## Lag 25000                          0.02620527                       0.027154822
+    ##           traitFemale:traitrfit.SiteID_Series traitrfit:traitrfit.SiteID_Series
+    ## Lag 0                              1.00000000                       1.000000000
+    ## Lag 500                           -0.01881348                       0.001952886
+    ## Lag 2500                           0.07499007                      -0.039534790
+    ## Lag 5000                          -0.01547835                       0.015375575
+    ## Lag 25000                          0.02620527                       0.074327758
+    ##           traitMale:traitMale.units traitFemale:traitMale.units
+    ## Lag 0                  1.0000000000                 1.000000000
+    ## Lag 500               -0.0215368542                 0.005682650
+    ## Lag 2500               0.0171395964                 0.016130604
+    ## Lag 5000               0.0498610139                -0.007000208
+    ## Lag 25000             -0.0003664209                -0.036058838
+    ##           traitrfit:traitMale.units traitMale:traitFemale.units
+    ## Lag 0                    1.00000000                 1.000000000
+    ## Lag 500                  0.17762458                 0.005682650
+    ## Lag 2500                 0.02145349                 0.016130604
+    ## Lag 5000                -0.01679469                -0.007000208
+    ## Lag 25000               -0.03090218                -0.036058838
+    ##           traitFemale:traitFemale.units traitrfit:traitFemale.units
+    ## Lag 0                        1.00000000                 1.000000000
+    ## Lag 500                     -0.02606191                 0.132976385
+    ## Lag 2500                     0.04826566                 0.021400217
+    ## Lag 5000                    -0.02304921                -0.009338485
+    ## Lag 25000                   -0.02209637                -0.037359105
+    ##           traitMale:traitrfit.units traitFemale:traitrfit.units
+    ## Lag 0                    1.00000000                 1.000000000
+    ## Lag 500                  0.17762458                 0.132976385
+    ## Lag 2500                 0.02145349                 0.021400217
+    ## Lag 5000                -0.01679469                -0.009338485
+    ## Lag 25000               -0.03090218                -0.037359105
+    ##           traitrfit:traitrfit.units
+    ## Lag 0                           NaN
+    ## Lag 500                         NaN
+    ## Lag 2500                        NaN
+    ## Lag 5000                        NaN
+    ## Lag 25000                       NaN
+
+``` r
+autocorr(mod.122$Sol)
+```
+
+    ## , , traitMale
+    ## 
+    ##              traitMale  traitFemale   traitrfit
+    ## Lag 0      1.000000000 -0.106844392  0.16485093
+    ## Lag 500    0.028274768 -0.030166701 -0.03470294
+    ## Lag 2500  -0.009707553 -0.032623701 -0.06021364
+    ## Lag 5000  -0.021188964  0.002447284  0.03994138
+    ## Lag 25000 -0.029401471 -0.001229661 -0.02433973
+    ## 
+    ## , , traitFemale
+    ## 
+    ##             traitMale  traitFemale    traitrfit
+    ## Lag 0     -0.10684439  1.000000000 -0.053129560
+    ## Lag 500   -0.02508024 -0.011135277  0.034053201
+    ## Lag 2500   0.03440654  0.009108160  0.030401833
+    ## Lag 5000  -0.01086469 -0.002763355 -0.002463588
+    ## Lag 25000 -0.03191749  0.012500836  0.033961940
+    ## 
+    ## , , traitrfit
+    ## 
+    ##             traitMale traitFemale    traitrfit
+    ## Lag 0     0.164850930 -0.05312956  1.000000000
+    ## Lag 500   0.024186973  0.05878735  0.051737697
+    ## Lag 2500  0.030896156 -0.02893851  0.025964434
+    ## Lag 5000  0.030594361  0.03274482 -0.009584145
+    ## Lag 25000 0.008456584  0.02471965 -0.004488274
+
+##### **Among and within-pair correlations and selection gradients– 2018/2019 3 trait model**
+
+``` r
+# posteriors
+require(bayestestR)
+require(ggplot2)
+posteriors_3<-as.mcmc(mod.122$VCV)
+
+
+# among-pair correlations
+pair.correlation_33<-posteriors_3[,"traitFemale:traitMale.SiteID_Series"]/
+  sqrt(posteriors_3[,"traitFemale:traitFemale.SiteID_Series"]*
+         posteriors_3[,"traitMale:traitMale.SiteID_Series"])
+
+posterior.mode(pair.correlation_33)
+```
+
+    ##      var1 
+    ## -0.407404
+
+``` r
+HPDinterval(pair.correlation_33)
+```
+
+    ##           lower     upper
+    ## var1 -0.8065424 0.1208981
+    ## attr(,"Probability")
+    ## [1] 0.95
+
+``` r
+paircor<-as.data.frame(pair.correlation_33)
+describe_posterior(paircor)
+```
+
+    ## Summary of Posterior Distribution
+    ## 
+    ## Parameter | Median |        95% CI |     pd |          ROPE | % in ROPE
+    ## -----------------------------------------------------------------------
+    ## var1      |  -0.32 | [-0.76, 0.18] | 91.90% | [-0.10, 0.10] |    15.47%
+
+``` r
+plot(pd(paircor$var1))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/plotmod122-1.png)<!-- -->
+
+``` r
+# within-pair correlations (residuals)
+residual.correlation_33<-posteriors_3[,"traitFemale:traitMale.units"]/
+  sqrt(posteriors_3[,"traitFemale:traitFemale.units"]*
+         posteriors_3[,"traitMale:traitMale.units"])
+
+posterior.mode(residual.correlation_33)
+```
+
+    ##      var1 
+    ## 0.2269476
+
+``` r
+HPDinterval(residual.correlation_33)
+```
+
+    ##           lower     upper
+    ## var1 0.03878706 0.4441294
+    ## attr(,"Probability")
+    ## [1] 0.95
+
+``` r
+withincor<-as.data.frame(residual.correlation_33)
+describe_posterior(withincor)
+```
+
+    ## Summary of Posterior Distribution
+    ## 
+    ## Parameter | Median |       95% CI |     pd |          ROPE | % in ROPE
+    ## ----------------------------------------------------------------------
+    ## var1      |   0.24 | [0.03, 0.44] | 98.70% | [-0.10, 0.10] |     6.63%
+
+``` r
+plot(pd(withincor$var1))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/plotmod122-2.png)<!-- -->
+
+``` r
+#male selection gradient
+Male_sel<- posteriors_3[,"traitrfit:traitMale.SiteID_Series"]/
+  (sqrt(posteriors_3[,"traitrfit:traitrfit.SiteID_Series"])*
+     sqrt(posteriors_3[,"traitMale:traitMale.SiteID_Series"]))
+posterior.mode(Male_sel)
+```
+
+    ##      var1 
+    ## 0.2013361
+
+``` r
+HPDinterval(Male_sel)
+```
+
+    ##            lower     upper
+    ## var1 -0.09807867 0.5275414
+    ## attr(,"Probability")
+    ## [1] 0.95
+
+``` r
+male<-as.data.frame(Male_sel)
+describe_posterior(male)
+```
+
+    ## Summary of Posterior Distribution
+    ## 
+    ## Parameter | Median |        95% CI |     pd |          ROPE | % in ROPE
+    ## -----------------------------------------------------------------------
+    ## var1      |   0.24 | [-0.11, 0.52] | 92.20% | [-0.10, 0.10] |    18.74%
+
+``` r
+plot(pd(male$var1))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/plotmod122-3.png)<!-- -->
+
+``` r
+#female selection gradient
+Female_sel<- posteriors_3[,"traitrfit:traitFemale.SiteID_Series"]/
+  (sqrt(posteriors_3[,"traitrfit:traitrfit.SiteID_Series"])*
+     sqrt(posteriors_3[,"traitFemale:traitFemale.SiteID_Series"]))
+posterior.mode(Female_sel)
+```
+
+    ##        var1 
+    ## -0.02716738
+
+``` r
+HPDinterval(Female_sel)
+```
+
+    ##           lower     upper
+    ## var1 -0.4708788 0.2359678
+    ## attr(,"Probability")
+    ## [1] 0.95
+
+``` r
+female<-as.data.frame(Female_sel)
+plot(pd(female$var1))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/plotmod122-4.png)<!-- -->
+
+``` r
+describe_posterior(female)
+```
+
+    ## Summary of Posterior Distribution
+    ## 
+    ## Parameter | Median |        95% CI |     pd |          ROPE | % in ROPE
+    ## -----------------------------------------------------------------------
+    ## var1      |  -0.09 | [-0.45, 0.25] | 67.50% | [-0.10, 0.10] |    39.47%
+
+``` r
+plot(pd(female$var1))+theme_classic()
+```
+
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/plotmod122-5.png)<!-- -->
+
+##### **Correlation Plot**
+
+``` r
+### create data frame and within-subject center for plot
+
 require(tidyr)
 
-df_mcmc_cors <- data_frame(Traits = c("Among pair-correlation (2018)",    
-                                      "Within pair-correlation (2018)",
-                                      "Among pair-correlation (2019)",
-                                      "Within pair-correlation (2019)"
+df_mcmc_cors <- data_frame(Traits = c("Among-pair (2018)",    
+                                      "Within-pair (2018)",
+                                      "Among-pair (2019)",
+                                      "Within-pair (2019)",
+                                      "Among-pair (Pooled)",
+                                      "Within-pair (Pooled)"
                                         ),
                            Estimate = c(posterior.mode(pair.correlation_3),
                                         posterior.mode(residual.correlation_3),
                                         posterior.mode(pair.correlation_4),
-                                        posterior.mode(residual.correlation4)),
+                                        posterior.mode(residual.correlation4),
+                                        posterior.mode(pair.correlation_33),
+                                        posterior.mode(residual.correlation_33)),
                            Lower = c(HPDinterval(pair.correlation_3)[,"lower"],
                                      HPDinterval(residual.correlation_3)[,"lower"],
                                      HPDinterval(pair.correlation_4)[,"lower"],
-                                     HPDinterval(residual.correlation4)[,"lower"]
+                                     HPDinterval(residual.correlation4)[,"lower"],
+                                     HPDinterval(pair.correlation_33)[,"lower"],
+                                     HPDinterval(residual.correlation_33)[,"lower"]
                                      ),
                            Upper = c(HPDinterval(pair.correlation_3)[,"upper"],
                                      HPDinterval(residual.correlation_3)[,"upper"],
                                      HPDinterval(pair.correlation_4)[,"upper"],
-                                     HPDinterval(residual.correlation4)[,"upper"]))
+                                     HPDinterval(residual.correlation4)[,"upper"],
+                                     HPDinterval(pair.correlation_33)[,"upper"],
+                                     HPDinterval(residual.correlation_33)[,"upper"]
+                                     ))
 
 
 
@@ -2246,12 +2851,11 @@ correlation1<-ggplot(df_mcmc_cors, aes(x = Traits, y = Estimate)) +
   geom_pointrange(aes(ymin = Lower,
                       ymax = Upper)) +
   geom_hline(yintercept = 0,
-             linetype = "dotted",alpha = 0.3) +
+             linetype = "dotted",alpha = 0.35, size=0.3) +
   labs(x = "",
        y = "Correlation (Estimate +/- 95% CIs)") +
   ylim(-1,1) +
-  coord_flip() +
-  theme_classic()
+  coord_flip() + theme_classic()
 
 
 
@@ -2260,21 +2864,31 @@ correlation1<-ggplot(df_mcmc_cors, aes(x = Traits, y = Estimate)) +
 df_mcmc_cors1 <- data_frame(Traits = c("Female (2018)",    
                                       "Male (2018)",
                                       "Female (2019)",
-                                      "Male (2019)"
+                                      "Male (2019)",
+                                      "Female (Pooled)",
+                                      "Male (Pooled)"
 ),
 Estimate = c(posterior.mode(Female_sel_18),
              posterior.mode(Male_sel_18),
              posterior.mode(Female_sel_19),
-             posterior.mode(Male_sel_19)),
+             posterior.mode(Male_sel_19),
+             posterior.mode(Female_sel),
+             posterior.mode(Male_sel)
+             ),
 Lower = c(HPDinterval(Female_sel_18)[,"lower"],
           HPDinterval(Male_sel_18)[,"lower"],
           HPDinterval(Female_sel_19)[,"lower"],
-          HPDinterval(Male_sel_19)[,"lower"]
+          HPDinterval(Male_sel_19)[,"lower"],
+          HPDinterval(Female_sel)[,"lower"],
+          HPDinterval(Male_sel)[,"lower"]
 ),
 Upper = c(HPDinterval(Female_sel_18)[,"upper"],
           HPDinterval(Male_sel_18)[,"upper"],
           HPDinterval(Female_sel_19)[,"upper"],
-          HPDinterval(Male_sel_19)[,"upper"]))
+          HPDinterval(Male_sel_19)[,"upper"],
+          HPDinterval(Female_sel)[,"upper"],
+          HPDinterval(Male_sel)[,"upper"]
+          ))
 
 
 
@@ -2283,15 +2897,14 @@ correlation2<-ggplot(df_mcmc_cors1, aes(x = Traits, y = Estimate)) +
   geom_pointrange(aes(ymin = Lower,
                       ymax = Upper)) +
   geom_hline(yintercept = 0,
-             linetype = "dotted",alpha = 0.3) +
+             linetype = "dotted",alpha = 0.35, size=0.3) +
   labs(x = "",
        y = "Correlation (Estimate +/- 95% CIs)") +
   ylim(-1,1) +
-  coord_flip() +
-  theme_classic()
+  coord_flip() + theme_classic()
 
 require(cowplot)
-plot_grid(correlation1,correlation2, labels = "AUTO")
+plot_grid(correlation1,correlation2, labels = c("A.", "B."), nrow = 1)
 ```
 
-![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/plots-1.png)<!-- -->
+![](State_dependence_repeatability_NestDefense_Rmd_files/figure-gfm/corrplot-1.png)<!-- -->
