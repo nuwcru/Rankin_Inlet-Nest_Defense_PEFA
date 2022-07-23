@@ -486,10 +486,11 @@ HPDinterval(r1)  ##repeatability
 ``` {r, unvME, include=T, warning=F, message=F, fig.height=5, fig.width=5}
 
 cor.test(data$Stage, data$NumberOfChicks)#correlation b/n nest stage and number of chicks. r=0.78 thus drop Number of Chicks from model 
-m1<-lmer(LogMin~ Sex + NestStage +Year2+ (1|ID) + (1|ID_Series) ,
+m1<-lmer(LogMin~ Sex+NestStage + Year2+ (1|ID) + (1|ID_Series) ,
          data=data) 
 #summary
 summary(m1)
+
 #model check
 plot(m1)
 hist(resid(m1)) # residuals
@@ -503,28 +504,75 @@ lattice::qqmath(m1) #normality of errors
 require(dplyr)
 library(arm)
 require(MCMCglmm)
+require(ggplot2)
 smod<-sim(m1,1000)
+describe_posterior(smod, ci = 0.95)
 posterior.mode(as.mcmc(smod@fixef))
 HPDinterval(as.mcmc(smod@fixef))
 ##Between individual variance
 bID<-smod@ranef$ID[,,1]
 bvar<-as.vector(apply(bID, 1, var)) ##ID variance posterior distribution
+
 require(MCMCglmm)
-bvar<-as.mcmc(bvar)
-posterior.mode(bvar )## mode of the distribution
-HPDinterval(bvar)
+bvar4<-as.mcmc(bvar)
+posterior.mode(bvar4)## mode of the distribution
+HPDinterval(bvar4)
+
+bvar11<-as.data.frame(bvar) #posterior plot
+describe_posterior(bvar11)
+bv<-describe_posterior(bvar11)#data frame for CrI and median
+
+ggplot(bvar11, aes(x = bvar)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(bv$Median), color="red", size=1)+
+   geom_vline(xintercept = (bv$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (bv$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Between-Individual Variance (ID)")+
+  ggtitle(label ="Density Plot Between-Indvidual Variance (ID)",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 ##Between individual variance, ID_Series
 bID2<-smod@ranef$ID_Series[,,1]
 bvar2<-as.vector(apply(bID2, 1, var)) ##ID_Series variance posterior distribution
 require(MCMCglmm)
-bvar2<-as.mcmc(bvar2)
-posterior.mode(bvar2 )## mode of the distribution
-HPDinterval(bvar2)
+bvar22<-as.mcmc(bvar2)
+posterior.mode(bvar22)## mode of the distribution
+HPDinterval(bvar22)
+
+bvar112<-as.data.frame(bvar2) #posterior plot
+describe_posterior(bvar112)
+bv2<-describe_posterior(bvar112)#data frame for CrI and median
+
+ggplot(bvar112, aes(x = bvar2)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(bv2$Median), color="red", size=1)+
+   geom_vline(xintercept = (bv2$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (bv2$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Between-Individual Variance (ID_Series)")+
+  ggtitle(label ="Density Plot Between-Indvidual Variance (ID_Series)",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
 ###residual variance
 rvar<-smod@sigma^2
 rvar<-as.mcmc(rvar)
 posterior.mode(rvar)
 HPDinterval(rvar)
+
+rvarr<-smod@sigma^2
+describe_posterior(rvarr)
+rv<-describe_posterior(rvarr)#data frame for CrI and median
+rvar11<-as.data.frame(rvarr) #posterior plot
+ggplot(rvar11, aes(x = rvarr)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rv$Median), color="red", size=1)+
+   geom_vline(xintercept = (rv$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rv$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Residual Variance")+
+  ggtitle(label ="Density Plot Residual Variance",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 
 ```
 
@@ -553,7 +601,6 @@ contable<-describe_posterior(contrast)#estimates for difference b/n male and fem
 contab<-contable%>%filter(Parameter=="diff")
 
 
-plot(pd(contrast$diff))+theme_classic()
 
 ggplot(contrast, aes(x=diff)) + geom_density(fill="orange") +
   geom_vline(xintercept = median(contrast$diff), color="red", size=1)+
@@ -607,8 +654,7 @@ p3<-ggplot(contrasts, aes(x=diff_ie)) + geom_density(fill="orange") +
           subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
   theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
 p3
-# pd plot incubation vs egg-laying
-plot(pd(contrasts$diff_ie))+theme_classic()
+
 
 
 # incubation vs provisioning
@@ -621,8 +667,7 @@ p2<-ggplot(contrasts, aes(x=diff_ip)) + geom_density(fill="orange") +
           subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
   theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
 p2
-# pd plot incubation vs egg-laying
-plot(pd(contrasts$diff_ip))+theme_classic()
+
 
 
 # egg laying vs provisioning
@@ -635,8 +680,7 @@ p1<-ggplot(contrasts, aes(x=diff_ep)) + geom_density(fill="orange") +
           subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
   theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
 p1
-# pd plot egg laying vs provisioning
-plot(pd(contrasts$diff_ep))+theme_classic()
+
 
 ```
 
@@ -680,20 +724,54 @@ ggplot(difference_y, aes(x=diff_year)) + geom_density(fill="orange") +
           subtitle = "Posterior Distribution, Median, and Highest Density Interval")+
   theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
 
-plot(pd(difference_y$diff_year))+theme_classic()
+
 ```
 
 ##### **Long-term and short-term repeatability--Univariate model with no interaction**
 
 ``` {r, lvsrpt, include=T, warning=F, message=F}
+
 ### Long-term repeatability
-r<-bvar/(rvar+bvar +bvar2 )
+r<-bvar4/(rvar+bvar4 +bvar22)
+r<-as.mcmc(r)
 posterior.mode(r)
 HPDinterval(r)  ##repeatability 
+
+rpt<-bvar4/(rvar+bvar4 +bvar22)
+rpt<-as.data.frame(rpt)
+rptt<-describe_posterior(rpt)#data frame for CrI and median
+rpt11<-as.data.frame(rpt) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Long-term Repeatability")+
+  ggtitle(label ="Density Plot Long-term Repeatability",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 ###Short-term
-r1<-(bvar +bvar2  )/(rvar+bvar +bvar2 )
+r1<-(bvar4 +bvar22  )/(rvar+bvar4 +bvar22)
+r1<-as.mcmc(r1)
 posterior.mode(r1)
 HPDinterval(r1)  ##repeatability
+
+rptr<-(bvar4 +bvar22  )/(rvar+bvar4 +bvar22)
+rptr<-as.data.frame(rptr)
+describe_posterior(rptr)
+rpttt<-describe_posterior(rptr)#data frame for CrI and median
+rpt111<-as.data.frame(rptr) #posterior plot
+ggplot(rpt111, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rpttt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rpttt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rpttt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Short-term Repeatability")+
+  ggtitle(label ="Density Plot Short-term Repeatability",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 ```
 
 
@@ -733,6 +811,138 @@ plot_grid(p18,p19)
 
 #posterior of difference plots for groups in main effects (supp material)
 cowplot::plot_grid(p3, p2, p1, nrow = 2,labels = c("A.", "B.", "C."))
+
+
+```
+
+#### **Density plots of behavioral types**
+
+```{r, denplot, warning=F, message=F, fig.height=25, fig.width=20}
+## density plots
+
+post1<-smod@ranef$ID
+post1<-as.data.frame(post1)
+
+colnames(post1)<-(c("01H", "03M", "119Female", 
+                         "119Male", "11A", "12Female",
+                         "12Male", "145Male","14H","155Female",
+                         "155Male", "156Female", "156Male", 
+                         "157Female", "15C ", "160Male",
+                         "168Female", "168Male","175Male",
+                         "179Female", "179Male","184Male", 
+                         "186Female", "18K", "193Male", 
+                         "196Male", "19K", "1Male",
+                         "201Female", "20H", "214Male", 
+                         "215Female", "215Male", "217Female",       
+                         "217Male", "219Female","219Male",     
+                         "223Female", "223Male", "227Male", 
+                         "228Female", "228Male", "231Female",       
+                         "234Male", "236Female", "23Female",
+                         "23Male",  "241Female", "241Male",
+                         "244Female", "244Male", "24K",     
+                         "251Female", "253Male", "254Female" ,      
+                         "254Male", "256Female", "25K",
+                         "304Female", "304Male", "30Female",
+                         "30Male", "318Female", "318Male", 
+                         "319Male", "32K", "38A",       
+                         "39E", "40Male", "41H",
+                         "43A", "43H", "44H",
+                         "45K", "46K", "47E", "47Female",
+                         "47Male","49E", "49H", 
+                         "4Female", "4Male", "50H",
+                         "53Female", "53Male", "55K",       
+                         "57Male", "58Male" , "59Male",
+                         "75B", "78Male", "80Female", "83K",
+                         "85C", "86C", "87C",
+                         "87K", "88C",  "89C",
+                         "89E", "90C", "91C",
+                         "92H", "93E", "97Female",
+                         "97Male", "98Female", "98Male"))
+
+
+#convert data to long format for plotting
+require(tidyr)
+plot_data<-post1%>% 
+  pivot_longer(c("01H", "03M", "119Female", 
+                         "119Male", "11A", "12Female",
+                         "12Male", "145Male","14H","155Female",
+                         "155Male", "156Female", "156Male", 
+                         "157Female", "15C ", "160Male",
+                         "168Female", "168Male","175Male",
+                         "179Female", "179Male","184Male", 
+                         "186Female", "18K", "193Male", 
+                         "196Male", "19K", "1Male",
+                         "201Female", "20H", "214Male", 
+                         "215Female", "215Male", "217Female",       
+                         "217Male", "219Female","219Male",     
+                         "223Female", "223Male", "227Male", 
+                         "228Female", "228Male", "231Female",       
+                         "234Male", "236Female", "23Female",
+                         "23Male",  "241Female", "241Male",
+                         "244Female", "244Male", "24K",     
+                         "251Female", "253Male", "254Female" ,      
+                         "254Male", "256Female", "25K",
+                         "304Female", "304Male", "30Female",
+                         "30Male", "318Female", "318Male", 
+                         "319Male", "32K", "38A",       
+                         "39E", "40Male", "41H",
+                         "43A", "43H", "44H",
+                         "45K", "46K", "47E", "47Female",
+                         "47Male","49E", "49H", 
+                         "4Female", "4Male", "50H",
+                         "53Female", "53Male", "55K",       
+                         "57Male", "58Male" , "59Male",
+                         "75B", "78Male", "80Female", "83K",
+                         "85C", "86C", "87C",
+                         "87K", "88C",  "89C",
+                         "89E", "90C", "91C",
+                         "92H", "93E", "97Female",
+                         "97Male", "98Female", "98Male"), names_to="ID", values_to="value")
+
+
+# add population level mean residual variance
+plot_data$value <-
+plot_data$value +
+fixef(m1, pars = "Intercept")[1]
+
+
+
+
+BT<-plot_data%>%
+  dplyr:: group_by(ID)%>%
+  dplyr:: mutate(meanBT=mean(value))%>%
+  dplyr:: ungroup()
+
+
+data_r<-data%>%
+  dplyr::select(ID,Sex)
+
+ref<-data_r[!duplicated(data_r),]
+
+
+bTT<-merge(BT, ref, all.x = T, no.dups = T)
+
+BTT<-bTT%>%replace_na(list(Sex='Male'))
+
+
+
+bt<-ggplot()+
+  ggridges::geom_density_ridges(data=BTT,
+                                aes(x=value,
+                                    y=reorder(as.factor(ID), meanBT),
+                                    height=..density..,
+                                    fill=ID, scale=3), alpha=0.6) +
+  geom_point(data = BTT[!duplicated(BTT$ID),],
+             aes(x = meanBT,
+                 y = as.factor(ID),
+                 col = Sex),
+             size = 1.8)+
+  labs(y="Tag ID", x="Behavioral Types (Log-transformed Nest Defense)")+
+  ggtitle(label ="Among-individual differences in nest defense",
+          subtitle = "Posterior distribution for each individual is plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.7), 
+        text = element_text(size=18),axis.ticks.y=element_blank(),axis.text.y=element_blank()) #remove y axis ticks)
+bt + theme(aspect.ratio=12/5)#+guides(fill="none")+ scale_fill_discrete(guide="none")+ theme(legend.position="none")
 
 ```
 
@@ -779,7 +989,7 @@ mod.12 <- MCMCglmm(cbind(Male, Female, rfit) ~ (trait-1),
                    data=data2018, 
                    prior = prior_E_B_fit_1px, 
                    verbose = FALSE,
-                   nitt=590000,thin=500,burnin=90000
+                   nitt=990000,thin=500,burnin=90000
                    )
 summary(mod.12)
 
@@ -805,8 +1015,25 @@ pair.correlation_3<-posteriors_3[,"traitFemale:traitMale.NestID"]/
   sqrt(posteriors_3[,"traitFemale:traitFemale.NestID"]*
          posteriors_3[,"traitMale:traitMale.NestID"])
 
+
 posterior.mode(pair.correlation_3)
 HPDinterval(pair.correlation_3)
+
+pair<-pair.correlation_3
+pair<-as.data.frame(pair)
+describe_posterior(pair)
+rptt<-describe_posterior(pair)#data frame for CrI and median
+rpt11<-as.data.frame(pair) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Among-Pair correlation")+
+  ggtitle(label ="Density Plot Among-Pair Correlation 2018",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 # within-pair correlations (residuals)
 residual.correlation_3<-posteriors_3[,"traitFemale:traitMale.units"]/
   sqrt(posteriors_3[,"traitFemale:traitFemale.units"]*
@@ -814,6 +1041,23 @@ residual.correlation_3<-posteriors_3[,"traitFemale:traitMale.units"]/
 
 posterior.mode(residual.correlation_3)
 HPDinterval(residual.correlation_3)
+
+
+wpair<-as.data.frame(residual.correlation_3)
+
+describe_posterior(wpair)
+rptt<-describe_posterior(wpair)#data frame for CrI and median
+rpt11<-as.data.frame(wpair) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Within-Pair correlation")+
+  ggtitle(label ="Density Plot Within-Pair Correlation 2018",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 #male selection gradient
 Male_sel_18<- posteriors_3[,"traitrfit:traitMale.NestID"]/
   (sqrt(posteriors_3[,"traitrfit:traitrfit.NestID"])*
@@ -821,12 +1065,42 @@ Male_sel_18<- posteriors_3[,"traitrfit:traitMale.NestID"]/
 posterior.mode(Male_sel_18)
 HPDinterval(Male_sel_18)
 
+
+male18<-as.data.frame(Male_sel_18)
+describe_posterior(male18)
+rptt<-describe_posterior(male18)#data frame for CrI and median
+rpt11<-as.data.frame(male18) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Male Selection Gradient")+
+  ggtitle(label ="Density Plot Male Selection Gradient 2018",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 #female selection gradient
 Female_sel_18<- posteriors_3[,"traitrfit:traitFemale.NestID"]/
   (sqrt(posteriors_3[,"traitrfit:traitrfit.NestID"])*
      sqrt(posteriors_3[,"traitFemale:traitFemale.NestID"]))
 posterior.mode(Female_sel_18)
 HPDinterval(Female_sel_18)
+
+
+female18<-as.data.frame(Female_sel_18)
+describe_posterior(female18)
+rptt<-describe_posterior(female18)#data frame for CrI and median
+rpt11<-as.data.frame(female18) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Female Selection Gradient")+
+  ggtitle(label ="Density Plot Female Selection Gradient 2018",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
 ```
 
 
@@ -849,7 +1123,7 @@ mod.13 <- MCMCglmm(cbind(Male, Female, rfit) ~ (trait-1),
                    data=data2019, 
                    prior = prior_E_B_fit_1px, 
                    verbose = FALSE,
-                   nitt=590000,thin=500,burnin=90000)
+                   nitt=990000,thin=500,burnin=90000)
 summary(mod.13)
 
 plot(mod.13)
@@ -876,6 +1150,21 @@ pair.correlation_4<-posteriors1[,"traitFemale:traitMale.NestID"]/
 
 posterior.mode(pair.correlation_4)
 HPDinterval(pair.correlation_4)
+
+pair<-as.data.frame(pair.correlation_4)
+describe_posterior(pair)
+rptt<-describe_posterior(pair)#data frame for CrI and median
+rpt11<-as.data.frame(pair) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Among-Pair correlation")+
+  ggtitle(label ="Density Plot Among-Pair Correlation 2019",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 # within-pair correlations (residuals)
 residual.correlation4<-posteriors1[,"traitFemale:traitMale.units"]/
   sqrt(posteriors1[,"traitFemale:traitFemale.units"]*
@@ -883,18 +1172,63 @@ residual.correlation4<-posteriors1[,"traitFemale:traitMale.units"]/
 
 posterior.mode(residual.correlation4)
 HPDinterval(residual.correlation4)
+
+
+wpair<-as.data.frame(residual.correlation4)
+describe_posterior(wpair)
+rptt<-describe_posterior(wpair)#data frame for CrI and median
+rpt11<-as.data.frame(wpair) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Within-Pair correlation")+
+  ggtitle(label ="Density Plot Within-Pair Correlation 2019",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 #male selection gradient
 Male_sel_19<- posteriors1[,"traitrfit:traitMale.NestID"]/
   (sqrt(posteriors1[,"traitrfit:traitrfit.NestID"])*
      sqrt(posteriors1[,"traitMale:traitMale.NestID"]))
 posterior.mode(Male_sel_19)
 HPDinterval(Male_sel_19)
+
+male19<-as.data.frame(Male_sel_19)
+describe_posterior(male19)
+rptt<-describe_posterior(male19)#data frame for CrI and median
+rpt11<-as.data.frame(male19) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Male Selection Gradient")+
+  ggtitle(label ="Density Plot Male Selection Gradient 2019",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 #female selection gradient
 Female_sel_19<- posteriors1[,"traitrfit:traitFemale.NestID"]/
   (sqrt(posteriors1[,"traitrfit:traitrfit.NestID"])*
      sqrt(posteriors1[,"traitFemale:traitFemale.NestID"]))
 posterior.mode(Female_sel_19)
 HPDinterval(Female_sel_19)
+
+female19<-as.data.frame(Female_sel_19)
+describe_posterior(female19)
+rptt<-describe_posterior(female19)#data frame for CrI and median
+rpt11<-as.data.frame(female19) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Female Selection Gradient")+
+  ggtitle(label ="Density Plot Female Selection Gradient 2019",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
 ```
 
 
@@ -1004,16 +1338,15 @@ data2019<-read.csv("C:/Users/nickg/OneDrive/Desktop/R projects/krmp_nest-defense
 
 
 
-data2018$Male<-log(data2018$male_raw+1)*-1  #log transform 
-data2018$Female<-log(data2018$female_raw+1)*-1 #log transform
+require(dplyr)
 data2018<-data2018%>%mutate(Site=SiteID)
+require(tidyr)
 data2018<-data2018%>% 
   unite(SiteID_Series,c("SiteID", "Year"))
 data2018<-data2018%>%mutate(Year="2018")
 
 
-data2019$Male<-log(data2019$male_raw+1)*-1 #log transform
-data2019$Female<-log(data2019$female_raw+1)*-1 #log transform
+
 data2019<-data2019%>%mutate(Site=SiteID)
 data2019<-data2019%>% 
   unite(SiteID_Series,c("SiteID", "Year"))
@@ -1021,7 +1354,8 @@ data2019<-data2019%>%mutate(Year="2019")
 
 
 data_2<-full_join(data2018, data2019) #join datasets
-
+data_2$Male<-log(data_2$male_raw+1)*-1 #log transform
+data_2$Female<-log(data_2$female_raw+1)*-1 #log transform
 #prior for three traits- from Houslay tutorial
 prior_E_B_fit_1px = list(R = list(V = diag(c(1,1,0.0001),3,3), nu = 1.002, fix = 3),
                          G = list(G1 = list(V = diag(3), nu = 3,
@@ -1038,7 +1372,7 @@ mod.122 <- MCMCglmm(cbind(Male, Female, rfit) ~ (trait-1),
                    data=data_2, 
                    prior = prior_E_B_fit_1px, 
                    verbose = FALSE,
-                   nitt=590000,thin=500,burnin=90000
+                   nitt=990000,thin=500,burnin=90000
 )
 
 plot(mod.122)
@@ -1066,9 +1400,21 @@ pair.correlation_33<-posteriors_3[,"traitFemale:traitMale.SiteID_Series"]/
 
 posterior.mode(pair.correlation_33)
 HPDinterval(pair.correlation_33)
-paircor<-as.data.frame(pair.correlation_33)
-describe_posterior(paircor)
-plot(pd(paircor$var1))+theme_classic()
+
+
+pair<-as.data.frame(pair.correlation_33)
+describe_posterior(pair)
+rptt<-describe_posterior(pair)#data frame for CrI and median
+rpt11<-as.data.frame(pair) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Among-Pair correlation")+
+  ggtitle(label ="Density Plot Among-Pair Correlation 2018/2019",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
 
 # within-pair correlations (residuals)
 residual.correlation_33<-posteriors_3[,"traitFemale:traitMale.units"]/
@@ -1077,9 +1423,22 @@ residual.correlation_33<-posteriors_3[,"traitFemale:traitMale.units"]/
 
 posterior.mode(residual.correlation_33)
 HPDinterval(residual.correlation_33)
-withincor<-as.data.frame(residual.correlation_33)
-describe_posterior(withincor)
-plot(pd(withincor$var1))+theme_classic()
+
+
+wpair<-as.data.frame(residual.correlation_33)
+describe_posterior(wpair)
+rptt<-describe_posterior(wpair)#data frame for CrI and median
+rpt11<-as.data.frame(wpair) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Within-Pair correlation")+
+  ggtitle(label ="Density Plot Within-Pair Correlation 2018/2019",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 
 
 #male selection gradient
@@ -1091,7 +1450,18 @@ HPDinterval(Male_sel)
 
 male<-as.data.frame(Male_sel)
 describe_posterior(male)
-plot(pd(male$var1))+theme_classic()
+rptt<-describe_posterior(male)#data frame for CrI and median
+rpt11<-as.data.frame(male) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Male Selection Gradient")+
+  ggtitle(label ="Density Plot Male Selection Gradient 2018/2019",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+
 #female selection gradient
 Female_sel<- posteriors_3[,"traitrfit:traitFemale.SiteID_Series"]/
   (sqrt(posteriors_3[,"traitrfit:traitrfit.SiteID_Series"])*
@@ -1100,10 +1470,20 @@ posterior.mode(Female_sel)
 HPDinterval(Female_sel)
 
 
+
 female<-as.data.frame(Female_sel)
-plot(pd(female$var1))+theme_classic()
 describe_posterior(female)
-plot(pd(female$var1))+theme_classic()
+rptt<-describe_posterior(female)#data frame for CrI and median
+rpt11<-as.data.frame(female) #posterior plot
+ggplot(rpt11, aes(x = var1)) +
+  geom_density(fill = "orange") +
+  geom_vline(xintercept = median(rptt$Median), color="red", size=1)+
+   geom_vline(xintercept = (rptt$CI_low), color="black", size=1, linetype="longdash")+
+  geom_vline(xintercept = (rptt$CI_high), color="black", size=1, linetype="longdash")+
+  labs(y="Density", x="Female Selection Gradient")+
+  ggtitle(label ="Density Plot Female Selection Gradient 2018/2019",
+          subtitle = "Posterior distribution plotted")+
+  theme(plot.title = element_text(face = "bold", hjust=0.5), plot.subtitle=element_text(hjust=0.5))
 ```
 
 
