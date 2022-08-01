@@ -119,13 +119,13 @@ HPDinterval(rvar)
 #### **Covariance matrix fixed effects**
 
 ```{r vcov1, include=T, warning=F, message=F}
-smfixef
+#smfixef
 ```
 
 #### **Covariance matrix random effects**
 
 ```{r vrcov1, include=T, warning=F, message=F}
-smranef
+#smranef
 ```
 
 
@@ -188,13 +188,13 @@ HPDinterval(rvar)
 #### **Covariance matrix fixed effects**
  
 ```{r vcov22, include=T, warning=F, message=F}
-smfixef
+#smfixef
 ```
 
 #### **Covariance matrix random effects**
 
 ```{r vrcov22, include=T, warning=F, message=F}
-smranef
+#smranef
 ```
 
 
@@ -246,13 +246,13 @@ HPDinterval(ObsVar)
 #### **Covariance matrix fixed effects**
 
 ```{r vcov33, include=T, warning=F, message=F}
-smfixef
+#smfixef
 ```
 
 #### **Covariance matrix random effects**
 
 ```{r vrcov33, include=T, warning=F, message=F}
-smranef
+#smranef
 ```
 
 
@@ -317,13 +317,13 @@ HPDinterval(rvar)
 #### **Covariance matrix fixed effects**
 
 ```{r vcov44, include=T, warning=F, message=F}
-smfixef
+#smfixef
 ```
 
 #### **Covariance matrix random effects**
 
 ```{r vrcov44, include=T, warning=F, message=F}
-smranef
+#smranef
 ```
 
 
@@ -384,13 +384,13 @@ plot(m3FID)
 #### **Covariance matrix fixed effects**
 
 ```{r vcov4423454, include=T, warning=F, message=F}
-m3FID$Sol
+#m3FID$Sol
 ```
 
 #### **Covariance matrix random effects**
 
 ```{r vrcov44234453, include=T, warning=F, message=F}
-m3FID$VCV
+#m3FID$VCV
 ```
 
 
@@ -401,7 +401,7 @@ m3FID$VCV
 c1 <- posterior.cor(m3FID$VCV[,1:9])
 round(apply(c1,2,mean),2)
 round(apply(c1,2, quantile, c(0.025, 0.975)),2)
-c1
+#c1
 ```
 
 
@@ -423,13 +423,13 @@ plot(m3Min)
 #### **Covariance matrix fixed effects**
 
 ```{r vcov445, include=T, warning=F, message=F}
-m3Min$Sol
+#m3Min$Sol
 ```
 
 #### **Covariance matrix random effects**
 
 ```{r vrcov445, include=T, warning=F, message=F}
-m3Min$VCV
+#m3Min$VCV
 ```
 
 ##### **Among-individual covariance--minimum approach distance across breeding contexts**
@@ -439,7 +439,7 @@ m3Min$VCV
 c1 <- posterior.cor(m3Min$VCV[,1:9])
 round(apply(c1,2,mean),2)
 round(apply(c1,2, quantile, c(0.025, 0.975)),2)
-c1
+#c1
 ```
 
 #### **Multivariate: number of dives across breeding contexts**
@@ -460,13 +460,13 @@ plot(m3Dives)
 #### **Covariance matrix fixed effects**
 
 ```{r vcov4455, include=T, warning=F, message=F}
-m3Dives$Sol
+#m3Dives$Sol
 ```
 
 #### **Covariance matrix random effects**
 
 ```{r vrcov4455, include=T, warning=F, message=F}
-m3Dives$VCV
+#m3Dives$VCV
 ```
 
 
@@ -477,7 +477,7 @@ m3Dives$VCV
 c1 <- posterior.cor(m3Dives$VCV[,1:9])
 round(apply(c1,2,mean),2)
 round(apply(c1,2, quantile, c(0.025, 0.975)),2)
-c1
+#c1
 ```
 
 
@@ -512,13 +512,13 @@ plot(model.2var)
 #### **Covariance matrix fixed effects**
 
 ```{r vcov44566, include=T, warning=F, message=F}
-model.2var$Sol
+#model.2var$Sol
 ```
 
 #### **Covariance matrix random effects**
 
 ```{r vrcov44566, include=T, warning=F, message=F}
-model.2var$VCV
+#model.2var$VCV
 ```
 
 #### **Among-individual and within-individual covariance--minimum distance and number of dives**
@@ -528,12 +528,12 @@ model.2var$VCV
 c1<- posterior.cor(model.2var$VCV[,1:4])
 round(apply(c1,2,mean),2)
 round(apply(c1,2, quantile, c(0.025, 0.975)),2)
-c1
+#c1
 #within individual covariance
 c2<- posterior.cor(model.2var$VCV[,5:8])
 round(apply(c2,2,mean),2)
 round(apply(c2,2, quantile, c(0.025, 0.975)),2)
-c2
+#c2
 ```
 
 
@@ -639,13 +639,13 @@ ggplot(rvar11, aes(x = rvarr)) +
 #### **Covariance matrix fixed effects**
 
 ```{r vcov133332, include=T, warning=F, message=F}
-smod@fixef
+#smod@fixef
 ```
 
 #### **Covariance matrix random effects**
 
 ```{r vrcov133332, include=T, warning=F, message=F}
-smod@ranef
+#smod@ranef
 ```
 
 
@@ -1080,7 +1080,7 @@ autocorr(mod.12$Sol)
 #### **Covariance matrix random effects**
 
 ```{r vrcov44999898, include=T, warning=F, message=F}
-mod.12$VCV
+#mod.12$VCV
 ```
 
 
@@ -1225,7 +1225,7 @@ posterior.mode(posteriors1)
 #### **Covariance matrix random effects**
 
 ```{r vrcov4394845754, include=T, warning=F, message=F}
-mod.13$VCV
+#mod.13$VCV
 ```
 
 
@@ -1432,7 +1432,7 @@ autocorr(mod.122$Sol)
 #### **Covariance matrix random effects**
 
 ```{r vrcov477655421234, include=T, warning=F, message=F}
-mod.122$VCV
+#mod.122$VCV
 ```
 
 
